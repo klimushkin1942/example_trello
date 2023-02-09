@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\ResetPassword\GetPinCodeAction;
+use App\Actions\ResetPassword\ResetPasswordAction;
+use App\Actions\ResetPassword\SendPinCodeAction;
 use App\Mail\MailNotify;
 use App\Models\PasswordResets;
 use Carbon\Carbon;
@@ -16,123 +19,31 @@ class ResetPasswordController extends Controller
 {
     /**
      * @param Request $request
+     * @param GetPinCodeAction $action
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getPinCode(Request $request)
+    public function getPinCode(Request $request, GetPinCodeAction $action)
     {
-        try {
-            $validateDataUser = Validator::make($request->all(), ['email' => 'required|email']);
-            if ($validateDataUser->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'errors' => $validateDataUser->errors()
-                ], 400);
-            }
-
-            $user = User::query()->where('email', $request->email)->first();
-
-            $pinCode = Str::random(6);
-            PasswordResets::create([
-                'user_id' => $user->id,
-                'email' => $request->email,
-                'token' => Hash::make($pinCode),
-            ]);
-
-            $data = [
-                'subject' => 'Сброс пароля',
-                'body' => "Добрый день!
-                           Введите пожалуйста этот пинкод для дальнейшей процедуры сброса пароля: " . $pinCode
-            ];
-
-            Mail::to($request->email)->send(new MailNotify($data));
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Pincode sended on email',
-                'token' => Hash::make($pinCode)
-            ], 200);
-
-        } catch (\Throwable $throwable) {
-            return response()->json([
-                'status' => false,
-                'message' => $throwable->getMessage()
-            ], 500);
-        }
+        return $action->handle($request);
     }
 
     /**
      * @param Request $request
+     * @param SendPinCodeAction $action
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendPinCode(Request $request)
+    public function sendPinCode(Request $request, SendPinCodeAction $action)
     {
-        if (!PasswordResets::query()
-            ->where('token', Hash::make($request->pincode))) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Error, this pincode not exist'
-            ], 400);
-        }
-
-        $passwordResetUser = PasswordResets::query()
-            ->where('token', Hash::make($request->pincode));
-
-        if ($passwordResetUser->created_at->diffInMinutes(Carbon::now()) > 30) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Request timed out'
-            ], 410);
-        }
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Pincode entered is correct',
-        ], 202);
+        return $action->handle($request);
     }
 
     /**
      * @param Request $request
+     * @param ResetPasswordAction $action
      * @return \Illuminate\Http\JsonResponse
      */
-    public function resetPassword(Request $request)
+    public function resetPassword(Request $request, ResetPasswordAction $action)
     {
-      try {
-          $passwordResetUser = PasswordResets::query()
-              ->where('token', $request->pincode)
-              ->first();
-
-          if ($passwordResetUser->created_at->diffInMinutes(Carbon::now()) > 30) {
-              return response()->json([
-                  'status' => false,
-                  'message' => 'Request timed out'
-              ], 410);
-          }
-
-          $user = User::query()
-              ->where('id', $passwordResetUser->user_id)
-              ->first();
-
-          if ($request->newPassword != $request->confirmPassword) {
-              return response()->json([
-                  'status' => false,
-                  'message' => 'Password not equals confirm password'
-              ], 403);
-          }
-
-          $user->update([
-              'password' => Hash::make($request->newPassword)
-          ]);
-
-          return response()->json([
-              'status' => true,
-              'message' => 'Password reset success'
-          ], 202);
-      } catch (\Throwable $throwable) {
-          return response()->json([
-              'status' => false,
-              'message' => $throwable->getMessage()
-          ], 500);
-      }
+        return $action->handle($request);
     }
 }
