@@ -26,11 +26,13 @@ Route::post('/send_pincode', [ResetPasswordController::class, 'sendPinCode']);
 Route::post('/reset_password', [ResetPasswordController::class, 'resetPassword']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/organizations', [UserController::class, 'index']);
+    Route::get('/organization/{id}', [UserController::class, 'show']);
+    Route::post('/organization', [UserController::class, 'store']);
+    Route::put('/organization/{id}', [UserController::class, 'update']);
+    Route::delete('/organization/{id}', [UserController::class, 'destroy']);
 
-    Route::get('/organization/{id}', [UserController::class, 'getOneOrganization']);
-    Route::get('/organization_all', [UserController::class, 'getAllOrganizations']);
-
-    Route::post('/create_organization', [UserController::class, 'createOrganization']);
-    Route::post('/update_organization/{id}', [UserController::class, 'updateOrganization']);
-    Route::post('/delete_organization/{id}', [UserController::class, 'deleteOrganization']);
+//    Route::post('/create_organization', [UserController::class, 'createOrganization']);
+//    Route::post('/update_organization/{id}', [UserController::class, 'updateOrganization']);
+//    Route::post('/delete_organization/{id}', [UserController::class, 'deleteOrganization']);
 });

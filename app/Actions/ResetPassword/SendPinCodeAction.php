@@ -8,29 +8,14 @@ use Illuminate\Support\Facades\Hash;
 
 class SendPinCodeAction
 {
-    public function handle($data)
+    public function handle($credentials)
     {
-        if (!PasswordResets::query()
-            ->where('token', Hash::make($data->pincode))) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Error, this pincode not exist'
-            ], 400);
-        }
-
-        $passwordResetUser = PasswordResets::query()
-            ->where('token', Hash::make($data->pincode));
+        $passwordResetUser = PasswordResets::where('token', $credentials['pincode'])->first();
 
         if ($passwordResetUser->created_at->diffInMinutes(Carbon::now()) > 30) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Request timed out'
-            ], 410);
+            return __('Request time out');
         }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Pincode entered is correct',
-        ], 202);
+        return __('Pincode is correct');
     }
 }

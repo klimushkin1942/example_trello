@@ -6,20 +6,8 @@ use App\Models\Organization;
 
 class GetAllOrganizationAction
 {
-    public function handle($data)
+    public function handle($credentials)
     {
-        try {
-            $organizations = Organization::all()->where('user_id', $data->user_id);
-            return response()->json([
-                'status' => true,
-                'message' => 'Get all organizations success',
-                'organizations' => $organizations
-            ], 200);
-        } catch (\Throwable $throwable) {
-            return response()->json([
-                'status' => false,
-                'message' => $throwable->getMessage()
-            ], 500);
-        }
+        return Organization::all()->where('user_id', $credentials['user_id']);
     }
 }
