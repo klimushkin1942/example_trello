@@ -13,9 +13,9 @@ class SendPinCodeAction
         $passwordResetUser = PasswordResets::where('token', $credentials['pincode'])->first();
 
         if ($passwordResetUser->created_at->diffInMinutes(Carbon::now()) > 30) {
-            return __('Request time out');
+            return __('mail.time_out');
         }
 
-        return __('Pincode is correct');
+        return __('mail.success');
     }
 }

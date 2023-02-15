@@ -2,21 +2,18 @@
 
 namespace App\Actions\Organizations;
 
-use App\Models\Organization;
-use App\Models\UsersOrganizations;
+use App\Models\User;
 
 class CreateOrganizationAction
 {
-    public function handle($credentials)
+    public function handle($userId, $credentials)
     {
-        $organization = Organization::create([
-            'name' => $credentials['name'],
-            'description' => $credentials['description'],
-        ]);
-
-        return UsersOrganizations::create([
-            'user_id' => $credentials['user_id'],
-            'organization_id' => $organization->id
-        ]);
+        return User::find($userId)
+            ->organizations()
+            ->create(
+                [
+                    'name' => $credentials['name'],
+                    'description' => $credentials['description']
+                ]);
     }
 }
