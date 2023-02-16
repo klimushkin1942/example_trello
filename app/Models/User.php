@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\HasRolesAndPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +10,6 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    use HasRolesAndPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -42,4 +40,26 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function organizations()
+    {
+        return $this->belongsToMany(Organization::class, 'users_organizations');
+    }
+
+    public function resetPassword()
+    {
+        return $this->hasOne(PasswordResets::class);
+    }
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+    public function getPasswordAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+
 }

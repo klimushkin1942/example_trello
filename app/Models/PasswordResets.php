@@ -12,10 +12,15 @@ class PasswordResets extends Model
     protected $fillable = [
         'email',
         'token',
-        'user_id'
+        'user_id',
     ];
 
     protected $casts = [
         'updated_at' => 'datetime',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

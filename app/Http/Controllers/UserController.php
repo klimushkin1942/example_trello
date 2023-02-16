@@ -2,117 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Organization;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Actions\Organizations\CreateOrganizationAction;
+use App\Actions\Organizations\DeleteOrganizationAction;
+use App\Actions\Organizations\GetAllOrganizationAction;
+use App\Actions\Organizations\GetOneOrganizationAction;
+use App\Actions\Organizations\UpdateOrganizationAction;
+use App\Http\Requests\Organization\OrganizationStoreRequest;
+use App\Http\Requests\Organization\OrganizationUpdateRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-
-    public function getAllOrganizations(Request $request)
+    public function index(GetAllOrganizationAction $action)
     {
-        try {
-            $organizations = Organization::all()->where('user_id', $request->user_id);
-            return response()->json([
-                'status' => true,
-                'message' => 'Get all organizations success',
-                'organizations' => $organizations
-            ], 200);
-        } catch (\Throwable $throwable) {
-            return response()->json([
-                'status' => false,
-                'message' => $throwable->getMessage()
-            ], 500);
-        }
-    }
-    public function createOrganization(Request $request)
-    {
-        try {
-            $validateOrganization = Validator::make($request->all(),
-                [
-                    'name' => 'required|string|min:6',
-                    'description' => 'required|string|max:255',
-                    'user_id' => 'required'
-                ]);
-
-            if ($validateOrganization->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'errors' => $validateOrganization->errors()
-                ], 401);
-            }
-
-            Organization::create([
-                'name' => $request->name,
-                'description' => $request->description,
-                'user_id' => $request->user_id
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Organization created',
-            ], 201);
-
-        } catch (\Throwable $throwable) {
-            return response()->json([
-                'status' => false,
-                'message' => $throwable->getMessage(),
-            ], 500);
-        }
-    }
-    public function updateOrganization(Request $request, $id)
-    {
-        try {
-            $input = $request->all();
-            $validator = Validator::make($input, [
-                'name' => 'required|string|min:6',
-                'description' => 'required|string|max:255'
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'errors' => $validator->errors()
-                ], 401);
-            }
-
-            $organization = Organization::find($id);
-            $organization->name = $request->name;
-            $organization->description = $request->description;
-            $organization->user_id = $request->user_id;
-
-            $organization->save();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Organization was updated',
-            ], 200);
-
-        } catch (\Throwable $throwable) {
-            return response()->json([
-                'status' => false,
-                'message' => $throwable->getMessage()
-            ], 400);
-        }
-
+        return $action->handle(Auth::id());
     }
 
-    public function deleteOrganization($id)
+    public function store(OrganizationStoreRequest $request, CreateOrganizationAction $action)
     {
-        try {
-            $organization = Organization::find($id);
-            $organization->delete();
-            return response()->json([
-                'status' => true,
-                'message' => 'Organization deleted'
-            ], 200);
-        } catch (\Throwable $throwable) {
-            return response()->json([
-                'status' => false,
-                'message' => $throwable->getMessage()
-            ], 400);
-        }
+        return $action->handle(Auth::id(), $request->all());
+    }
+
+    public function show($orgId, GetOneOrganizationAction $action)
+    {
+        return $action->handle(Auth::id(), $orgId);
+    }
+
+    public function update(OrganizationUpdateRequest $request, $id, UpdateOrganizationAction $action)
+    {
+        return $action->handle(Auth::id(), $id, $request->all());
+    }
+
+    public function destroy($orgId, DeleteOrganizationAction $action)
+    {
+        return $action->handle(Auth::id(), $orgId);
     }
 }
