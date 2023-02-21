@@ -28,7 +28,7 @@ class MailNotify extends Mailable
      */
     public function build()
     {
-        return $this->from('klimushkin_test@mail.ru', 'Сброс пароля')
+        return $this->from('klimushkin_test@mail.ru', $this->data['name'])
             ->subject($this->data['subject'])
             ->view('emails.index')->with('data', $this->data);
     }

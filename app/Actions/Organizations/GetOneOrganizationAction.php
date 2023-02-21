@@ -11,6 +11,6 @@ class GetOneOrganizationAction
         return User::find($userId)
             ->organizations()
             ->where('organization_id', $id)
-            ->get();
+            ->first();
     }
 }

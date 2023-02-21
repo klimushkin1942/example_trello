@@ -2,39 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Organizations\CreateOrganizationAction;
-use App\Actions\Organizations\DeleteOrganizationAction;
-use App\Actions\Organizations\GetAllOrganizationAction;
-use App\Actions\Organizations\GetOneOrganizationAction;
-use App\Actions\Organizations\UpdateOrganizationAction;
-use App\Http\Requests\Organization\OrganizationStoreRequest;
-use App\Http\Requests\Organization\OrganizationUpdateRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Actions\Users\CreateUserAction;
+use App\Actions\Users\DeleteUserAction;
+use App\Actions\Users\GetAllUserAction;
+use App\Actions\Users\GetOneUserAction;
+use App\Actions\Users\UpdateUserAction;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 
 class UserController extends Controller
 {
-    public function index(GetAllOrganizationAction $action)
+    public function index(GetAllUserAction $action)
     {
-        return $action->handle(Auth::id());
+//        $this->authorize('view-protected-part', [self::class]);
+        return $action->handle();
     }
 
-    public function store(OrganizationStoreRequest $request, CreateOrganizationAction $action)
+    public function store(UserStoreRequest $request, CreateUserAction $action)
     {
-        return $action->handle(Auth::id(), $request->all());
+        return $action->handle($request->all());
     }
 
-    public function show($orgId, GetOneOrganizationAction $action)
+    public function show($userId, GetOneUserAction $action)
     {
-        return $action->handle(Auth::id(), $orgId);
+        return $action->handle($userId);
     }
 
-    public function update(OrganizationUpdateRequest $request, $id, UpdateOrganizationAction $action)
+    public function update(UserUpdateRequest $request, $userId, UpdateUserAction $action)
     {
-        return $action->handle(Auth::id(), $id, $request->all());
+        return $action->handle($userId, $request->all());
     }
 
-    public function destroy($orgId, DeleteOrganizationAction $action)
+    public function destroy($userId, DeleteUserAction $action)
     {
-        return $action->handle(Auth::id(), $orgId);
+        return $action->handle($userId);
     }
 }

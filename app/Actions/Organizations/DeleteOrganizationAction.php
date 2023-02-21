@@ -9,6 +9,7 @@ class DeleteOrganizationAction
 {
     public function handle($userId, $id)
     {
+//        return 'Заебись';
         return User::find($userId)
             ->organizations()
             ->where('organization_id', $id)
