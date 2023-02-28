@@ -9,6 +9,7 @@ use App\Actions\Organizations\GetOneOrganizationAction;
 use App\Actions\Organizations\UpdateOrganizationAction;
 use App\Http\Requests\Organization\OrganizationStoreRequest;
 use App\Http\Requests\Organization\OrganizationUpdateRequest;
+use App\Models\Organization;
 use Illuminate\Support\Facades\Auth;
 
 class OrganizationController extends Controller
@@ -25,18 +26,19 @@ class OrganizationController extends Controller
 
     public function show($orgId, GetOneOrganizationAction $action)
     {
+        $this->authorize('can-read-organization', [Organization::class, $orgId]);
         return $action->handle(Auth::id(), $orgId);
     }
 
     public function update(OrganizationUpdateRequest $request, $orgId, UpdateOrganizationAction $action)
     {
-        $this->authorize('can-update-organization', [self::class, $orgId]);
+        $this->authorize('can-update-organization', [Organization::class, $orgId]);
         return $action->handle(Auth::id(), $orgId, $request->all());
     }
 
     public function destroy($orgId, DeleteOrganizationAction $action)
     {
-        $this->authorize('can-delete-organization', [self::class, $orgId]);
+        $this->authorize('can-delete-organization', [Organization::class, $orgId]);
         return $action->handle(Auth::id(), $orgId);
     }
 }

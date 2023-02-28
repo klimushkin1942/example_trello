@@ -9,10 +9,11 @@ class GetAllOrganizationAction
 {
     public function handle($userId)
     {
-        return User::find($userId)
+        return User::findOrFail($userId)
             ->organizations()
             ->orderBy('created_at', 'asc')
             ->limit(5)
+            ->offset(0)
             ->get();
     }
 }

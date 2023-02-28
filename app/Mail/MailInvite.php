@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class MailNotify extends Mailable
+class MailInvite extends Mailable
 {
     use Queueable, SerializesModels;
     private $data = [];
@@ -30,6 +30,6 @@ class MailNotify extends Mailable
     {
         return $this->from('klimushkin_test@mail.ru', $this->data['name'])
             ->subject($this->data['subject'])
-            ->view('emails.index')->with('data', $this->data);
+            ->view('emails.invite_user')->with('data', $this->data);
     }
 }

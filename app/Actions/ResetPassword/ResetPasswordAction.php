@@ -8,7 +8,7 @@ class ResetPasswordAction
 {
     public function handle($credentials, $userId)
     {
-        $user = User::find($userId);
+        $user = User::findOrFail($userId);
         $user->password = $credentials['password'];
         $user->save();
         return __('passwords.reset');

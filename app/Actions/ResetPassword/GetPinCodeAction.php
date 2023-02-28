@@ -2,7 +2,8 @@
 
 namespace App\Actions\ResetPassword;
 
-use App\Mail\MailNotify;
+use App\Mail\MailInvite;
+use App\Mail\MailResetPassword;
 use App\Models\PasswordResets;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -24,11 +25,12 @@ class GetPinCodeAction
 
         $dataForMail = [
             'subject' => 'Сброс пароля',
+            'name' => 'Сброс пароля',
             'body' => "Добрый день!
                            Введите пожалуйста этот пинкод для дальнейшей процедуры сброса пароля: " . $pinCode
         ];
 
-        Mail::to($credentials['email'])->send(new MailNotify($dataForMail));
+        Mail::to($credentials['email'])->send(new MailResetPassword($dataForMail));
 
         return __('mail.send');
     }

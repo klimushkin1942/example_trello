@@ -8,9 +8,14 @@ class UpdateProjectAction
 {
     public function handle($orgId, $credentials, $projectId)
     {
-        return Project::where('organization_id', $orgId)->where('id', $projectId)->update([
+        $project = Project::findOrFail($projectId);
+        $project->update([
             'name' => $credentials['name'],
             'description' => $credentials['description']
         ]);
+//        return Project::where('organization_id', $orgId)->where('id', $projectId)->update([
+//            'name' => $credentials['name'],
+//            'description' => $credentials['description']
+//        ]);
     }
 }

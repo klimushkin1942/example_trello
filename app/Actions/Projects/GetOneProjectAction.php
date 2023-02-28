@@ -8,6 +8,6 @@ class GetOneProjectAction
 {
     public function handle($orgId, $projectId)
     {
-        return Project::where('organization_id', $orgId)->where('id', $projectId)->first();
+        return Project::findOrFail($projectId);
     }
 }

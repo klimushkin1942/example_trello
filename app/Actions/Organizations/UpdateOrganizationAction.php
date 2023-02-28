@@ -10,7 +10,7 @@ class UpdateOrganizationAction
 {
     public function handle($userId, $id, $data)
     {
-        return User::find($userId)
+        return User::findOrFail($userId)
             ->organizations()
             ->where('organization_id', $id)
             ->update($data);

@@ -6,6 +6,6 @@ class GetOneUserAction
 {
     public function handle(int $userId)
     {
-        return User::find($userId);
+        return User::findOrFail($userId);
     }
 }

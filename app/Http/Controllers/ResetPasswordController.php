@@ -36,9 +36,7 @@ class ResetPasswordController extends Controller
     {
         $credentials = $request->all();
 
-        $passwordResetUser = PasswordResets::where('token', $credentials['pincode'])
-            ->orderBy('created_at', 'asc')
-            ->first();
+        $passwordResetUser = PasswordResets::where('email', 'muhammed1942ali@gmail.com')->orderBy('id', 'desc')->first();
 
         if ($passwordResetUser->created_at->diffInMinutes(Carbon::now()) > 30) {
             return __('mail.time_out');

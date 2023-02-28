@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -12,15 +13,9 @@ class AuthTest extends TestCase
 {
     public function test_register_user()
     {
-//        $response = $this->post('/api/register', [
-//            'name' => Str::random(20),
-//            'email' => Str::random(10) . "@mail.com",
-//            'password' => Str::random(20)
-//        ]);
-
         $response = $this->post('/api/register', [
-            'name' => "Артемий",
-            'email' => "muhammed1942ali@gmail.com",
+            'name' => Str::random(10),
+            'email' => Str::random(10) . '@gmail.com',
             'password' => "klimushkin1942"
         ]);
 

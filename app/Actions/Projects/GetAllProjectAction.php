@@ -11,6 +11,7 @@ class GetAllProjectAction
         return Project::where('organization_id', $orgId)
             ->orderBy('created_at', 'asc')
             ->limit(5)
+            ->offset(0)
             ->get();
     }
 }

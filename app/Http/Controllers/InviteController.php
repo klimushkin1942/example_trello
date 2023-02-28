@@ -11,7 +11,7 @@ class InviteController extends Controller
 {
     public function store(InviteStoreRequest $request, $orgId, $roleId, SendInviteAction $action)
     {
-        return $action->handle($request->all(), $orgId, $roleId);
+        return $action->handle($request->validated(), $orgId, $roleId);
     }
 
     public function accept($token, AcceptInviteAction $action)

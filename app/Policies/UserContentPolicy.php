@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\RoleTypes;
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -20,13 +21,26 @@ class UserContentPolicy
     {
 
     }
+
     public function canUpdateOrganization(User $user, $orgId)
     {
         $users_role = UsersRolesOrganizations::where('user_id', $user->id)
             ->where('organization_id', $orgId)
             ->first();
 
-        if (!empty($users_role) && $users_role->role_id == 1) {
+        if (!empty($users_role) && $users_role->role_id == RoleTypes::ADMIN->value) {
+            return Response::allow('Admin');
+        }
+        return Response::deny('Нет доступа');
+    }
+
+    public function canReadOrganization(User $user, $orgId)
+    {
+        $users_role = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        if (!empty($users_role) && $users_role->role_id == RoleTypes::ADMIN->value) {
             return Response::allow('Admin');
         }
         return Response::deny('Нет доступа');
@@ -38,7 +52,7 @@ class UserContentPolicy
             ->where('organization_id', $orgId)
             ->first();
 
-        if (!empty($users_role) && $users_role->role_id == 1) {
+        if (!empty($users_role) && $users_role->role_id == RoleTypes::ADMIN->value) {
             return Response::allow('Admin');
         }
         return Response::deny('Нет доступа');
@@ -51,9 +65,9 @@ class UserContentPolicy
             ->where('organization_id', $orgId)
             ->first();
 
-        if (!empty($users_role) && $users_role->role_id == 1) {
+        if (!empty($users_role) && $users_role->role_id == RoleTypes::ADMIN->value) {
             return Response::allow('Admin');
-        } elseif (!empty($users_role) && $users_role->role_id == 2) {
+        } elseif (!empty($users_role) && $users_role->role_id == RoleTypes::USER->value) {
             return Response::allow('User');
         }
         return Response::deny('Нет доступа');
@@ -65,13 +79,28 @@ class UserContentPolicy
             ->where('organization_id', $orgId)
             ->first();
 
-        if (!empty($users_role) && $users_role->role_id == 1) {
+        if (!empty($users_role) && $users_role->role_id == RoleTypes::ADMIN->value) {
             return Response::allow('Admin');
-        } elseif (!empty($users_role) && $users_role->role_id == 2) {
+        } elseif (!empty($users_role) && $users_role->role_id == RoleTypes::USER->value) {
             return Response::allow('User');
         }
         return Response::deny('Нет доступа');
     }
+
+    public function canReadProject(User $user, $orgId)
+    {
+        $users_role = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        if (!empty($users_role) && $users_role->role_id == RoleTypes::ADMIN->value) {
+            return Response::allow('Admin');
+        } elseif (!empty($users_role) && $users_role->role_id == RoleTypes::USER->value) {
+            return Response::allow('User');
+        }
+        return Response::deny('Нет доступа');
+    }
+
 
     public function canUpdateProject(User $user, $orgId)
     {
@@ -79,9 +108,9 @@ class UserContentPolicy
             ->where('organization_id', $orgId)
             ->first();
 
-        if (!empty($users_role) && $users_role->role_id == 1) {
+        if (!empty($users_role) && $users_role->role_id == RoleTypes::ADMIN->value) {
             return Response::allow('Admin');
-        } elseif (!empty($users_role) && $users_role->role_id == 2) {
+        } elseif (!empty($users_role) && $users_role->role_id == RoleTypes::USER->value) {
             return Response::allow('User');
         }
         return Response::deny('Нет доступа');

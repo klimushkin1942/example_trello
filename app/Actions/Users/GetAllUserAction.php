@@ -8,6 +8,7 @@ class GetAllUserAction
     {
         return User::orderBy('created_at', 'asc')
             ->limit(5)
+            ->offset(0)
             ->get();
     }
 }

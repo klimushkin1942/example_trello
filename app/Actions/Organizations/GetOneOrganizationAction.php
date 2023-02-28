@@ -8,7 +8,7 @@ class GetOneOrganizationAction
 {
     public function handle($userId, $id)
     {
-        return User::find($userId)
+        return User::findOrFail($userId)
             ->organizations()
             ->where('organization_id', $id)
             ->first();

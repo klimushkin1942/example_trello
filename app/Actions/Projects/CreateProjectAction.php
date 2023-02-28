@@ -9,7 +9,7 @@ class CreateProjectAction
 {
     public function handle($credentials, $orgId)
     {
-        $organization = Organization::find($orgId);
+        $organization = Organization::findOrFail($orgId);
 
         return Project::create([
             'organization_id' => $organization->id,

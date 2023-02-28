@@ -4,12 +4,14 @@ namespace App\Actions\Organizations;
 
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
+use App\Enums\RoleTypes;
 
 class CreateOrganizationAction
 {
+
     public function handle($userId, $credentials)
     {
-        $organization = User::find($userId)
+        $organization = User::findOrFail($userId)
             ->organizations()
             ->create(
                 [
@@ -20,7 +22,7 @@ class CreateOrganizationAction
         UsersRolesOrganizations::create([
             'user_id' => $userId,
             'organization_id' => $organization->id,
-            'role_id' => '1'
+            'role_id' => RoleTypes::ADMIN->value
         ]);
     }
 }

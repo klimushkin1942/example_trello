@@ -6,6 +6,7 @@ class UpdateUserAction
 {
     public function handle(int $userId, $data)
     {
-        return User::find($userId)->update($data);
+        $user = User::findOrFail($userId);
+        return $user->update($data);
     }
 }

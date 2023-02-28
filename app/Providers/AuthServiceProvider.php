@@ -6,6 +6,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\UserController;
 use App\Models\Organization;
+use App\Models\Project;
 use App\Models\User;
 use App\Models\UsersOrganizations;
 use App\Policies\UserContentPolicy;
@@ -22,9 +23,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
-        UserController::class => UserContentPolicy::class,
-        OrganizationController::class => UserContentPolicy::class,
-        ProjectsController::class => UserContentPolicy::class
+        User::class => UserContentPolicy::class,
+        Organization::class => UserContentPolicy::class,
+        Project::class => UserContentPolicy::class
     ];
 
     /**
