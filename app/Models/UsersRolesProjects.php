@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-class UsersRolesOrganizations extends Model
+class UsersRolesProjects extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'organization_id',
         'user_id',
+        'organization_id',
+        'project_id',
         'role_id'
     ];
-
 }

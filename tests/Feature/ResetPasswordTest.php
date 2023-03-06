@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\PasswordResets;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Tests\TestCase;
-use function PHPUnit\Framework\assertTrue;
 
 class ResetPasswordTest extends TestCase
 {

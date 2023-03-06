@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Invite;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class InviteStoreRequest extends FormRequest
+class GetAllUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class InviteStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|min:6|unique:users,email',
+            'limit' => 'required|integer|max:30',
+            'offset' => 'required|integer',
         ];
     }
 }

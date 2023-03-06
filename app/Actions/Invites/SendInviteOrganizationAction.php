@@ -1,14 +1,15 @@
 <?php
 
 namespace App\Actions\Invites;
-use App\Models\Invite;
 use App\Models\Organization;
-use App\Models\UsersRolesOrganizations;
+use App\Models\UsersOrganizations;
 use Illuminate\Support\Str;
 use App\Models\User;
-use App\Mail\MailInvite;
+use App\Models\Invite;
 use Illuminate\Support\Facades\Mail;
-class SendInviteAction
+use App\Mail\Invites\MailInviteOrganization;
+use App\Models\UsersRolesOrganizations;
+class SendInviteOrganizationAction
 {
     public function handle($credentials, $orgId, $roleId)
     {
@@ -16,9 +17,14 @@ class SendInviteAction
         $token = Str::random(10);
 
         $user = User::create([
-            'email' => $credentials['email'],
             'name' => 'default',
-            'password' => 'password',
+            'email' => $credentials['email'],
+            'password' => 'password'
+        ]);
+
+        UsersOrganizations::create([
+            'user_id' => $user->id,
+            'organization_id' => $orgId
         ]);
 
         UsersRolesOrganizations::create([
@@ -40,7 +46,6 @@ class SendInviteAction
             'organization_id' => $organization->id
         ]);
 
-        return Mail::to($credentials['email'])->send(new MailInvite($dataForMail));
+        return Mail::to($credentials['email'])->send(new MailInviteOrganization($dataForMail));
     }
-
 }

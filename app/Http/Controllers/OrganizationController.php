@@ -7,6 +7,7 @@ use App\Actions\Organizations\DeleteOrganizationAction;
 use App\Actions\Organizations\GetAllOrganizationAction;
 use App\Actions\Organizations\GetOneOrganizationAction;
 use App\Actions\Organizations\UpdateOrganizationAction;
+use App\Http\Requests\Organization\GetAllOrganizationRequest;
 use App\Http\Requests\Organization\OrganizationStoreRequest;
 use App\Http\Requests\Organization\OrganizationUpdateRequest;
 use App\Models\Organization;
@@ -14,9 +15,9 @@ use Illuminate\Support\Facades\Auth;
 
 class OrganizationController extends Controller
 {
-    public function index(GetAllOrganizationAction $action)
+    public function index(GetAllOrganizationAction $action, GetAllOrganizationRequest $request)
     {
-        return $action->handle(Auth::id());
+        return $action->handle(Auth::id(), $request->limit, $request->offset);
     }
 
     public function store(OrganizationStoreRequest $request, CreateOrganizationAction $action)

@@ -16,5 +16,6 @@ class LoginUserAction
                 "token" => $user->createtoken('token')->plainTextToken
             ];
         }
+        return __('auth.login.failed');
     }
 }

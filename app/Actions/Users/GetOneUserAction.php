@@ -2,10 +2,13 @@
 
 namespace App\Actions\Users;
 use App\Models\User;
+use App\Models\Organization;
 class GetOneUserAction
 {
-    public function handle(int $userId)
+    public function handle($orgId, $userId)
     {
-        return User::findOrFail($userId);
+        return Organization::findOrFail($orgId)
+            ->users()
+            ->findOrFail($userId);
     }
 }

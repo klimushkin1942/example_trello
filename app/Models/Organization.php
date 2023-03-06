@@ -25,7 +25,7 @@ class Organization extends Model
         return $this->belongsToMany(Project::class, 'projects');
     }
 
-    public function users_roles_organizations()
+    public function usersRolesOrganizations()
     {
         return $this->belongsToMany(UsersRolesOrganizations::class);
     }

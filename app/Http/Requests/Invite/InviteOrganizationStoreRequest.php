@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Invite;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserIndexRequest extends FormRequest
+class InviteOrganizationStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class UserIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'limit' => 'required|string|',
-            'offset' => 'required|integer'
+            'email' => 'required|email|min:6|unique:users,email',
         ];
     }
 }

@@ -1,11 +1,9 @@
 <?php
 
 namespace App\Actions\Invites;
-
 use App\Models\Invite;
 use App\Models\User;
-
-class AcceptInviteAction
+class AcceptInviteOrganizationAction
 {
     public function handle($token)
     {

@@ -2,19 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Invites\AcceptInviteAction;
-use App\Actions\Invites\SendInviteAction;
-use App\Http\Requests\Invite\InviteStoreRequest;
-use App\Mail\MailInvite;
+use App\Actions\Invites\AcceptInviteOrganizationAction;
+use App\Actions\Invites\AcceptInviteProjectAction;
+use App\Actions\Invites\SendInviteOrganizationAction;
+use App\Actions\Invites\SendInviteProjectAction;
+use App\Actions\Invites\SendInviteProjectExistsUserAction;
+use App\Actions\Invites\SendInviteProjectNotExistsUserAction;
+use App\Http\Requests\Invite\InviteProjectStoreRequest;
+use App\Http\Requests\Invite\InviteOrganizationStoreRequest;
+use App\Models\Invite;
 
 class InviteController extends Controller
 {
-    public function store(InviteStoreRequest $request, $orgId, $roleId, SendInviteAction $action)
+    public function inviteToOrganization(InviteOrganizationStoreRequest $request, $orgId, $roleId, SendInviteOrganizationAction $action)
     {
         return $action->handle($request->validated(), $orgId, $roleId);
     }
 
-    public function accept($token, AcceptInviteAction $action)
+
+    public function inviteToProjectExitsUser(InviteProjectStoreRequest $request, $orgId,
+                                                                       $projectId, $roleProId, SendInviteProjectAction $action)
+    {
+        return $action->handle($request->validated(), $orgId, $projectId, $roleProId);
+    }
+
+    public function acceptInviteToOrganization($token, AcceptInviteOrganizationAction $action)
     {
         return $action->handle($token);
     }

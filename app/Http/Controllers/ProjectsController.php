@@ -7,6 +7,7 @@ use App\Actions\Projects\DeleteProjectAction;
 use App\Actions\Projects\GetAllProjectAction;
 use App\Actions\Projects\GetOneProjectAction;
 use App\Actions\Projects\UpdateProjectAction;
+use App\Http\Requests\Project\GetAllProjectRequest;
 use App\Http\Requests\Project\ProjectStoreRequest;
 use App\Http\Requests\Project\ProjectUpdateRequest;
 use App\Models\Project;
@@ -14,20 +15,21 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectsController extends Controller
 {
-    public function index(GetAllProjectAction $action, $orgId)
+    public function index(GetAllProjectAction $action, $orgId, GetAllProjectRequest $request)
     {
-        return $action->handle(Auth::id(), $orgId);
+        $this->authorize('can-get-all-project', [Project::class, $orgId]);
+        return $action->handle($orgId, $request->limit, $request->offset);
     }
 
     public function store(ProjectStoreRequest $request, $orgId, CreateProjectAction $action)
     {
         $this->authorize('can-create-project', [Project::class, $orgId]);
-        return $action->handle($request->all(), $orgId);
+        return $action->handle($request->all(), $orgId, Auth::id());
     }
 
     public function show(GetOneProjectAction $action, $orgId, $projectId)
     {
-        $this->authorize('can-read-project', [Project::class, $orgId]);
+        $this->authorize('can-read-project', [Project::class, $orgId, $projectId]);
         return $action->handle($orgId, $projectId);
     }
 

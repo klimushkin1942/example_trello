@@ -17,7 +17,7 @@ class InviteTest extends TestCase
 
         $roleId = Role::find(3)->id;
 
-        $response = $this->actingAs($user)->post('/api/organizations/' . $orgId . '/invite_user_role/' . $roleId, [
+        $response = $this->actingAs($user)->post('/api/organizations/' . $orgId . '/invite/' . $roleId, [
             'email' => 'lina.vasilenko.2001@mail.ru'
         ]);
 

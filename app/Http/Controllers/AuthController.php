@@ -34,7 +34,6 @@ class AuthController extends Controller
         return $action->handle($user, $request->password);
     }
 
-
     /**
      * @param Request $request
      * @return string

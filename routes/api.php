@@ -24,7 +24,7 @@ Route::post('/register', [AuthController::class, 'registerUser']);
 Route::post('/login', [AuthController::class, 'loginUser']);
 Route::post('/logout', [AuthController::class, 'logoutUser']);
 
-Route::get('/accept/{token}', [InviteController::class, 'accept']);
+Route::get('/accept/{token}', [InviteController::class, 'acceptInviteToOrganization']);
 
 Route::post('/forgot_password', [ResetPasswordController::class, 'getPinCode']);
 Route::post('/send_pincode', [ResetPasswordController::class, 'sendPinCode']);
@@ -33,24 +33,33 @@ Route::post('/reset_password', [ResetPasswordController::class, 'resetPassword']
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // organizations
     Route::get('/organizations', [OrganizationController::class, 'index']);
-    Route::get('/organizations/{org_id}', [OrganizationController::class, 'show']);
+    Route::get('/organizations/{orgId}', [OrganizationController::class, 'show']);
     Route::post('/organizations', [OrganizationController::class, 'store']);
-    Route::put('/organizations/{id}', [OrganizationController::class, 'update']);
-    Route::delete('/organizations/{id}', [OrganizationController::class, 'destroy']);
+    Route::put('/organizations/{orgId}', [OrganizationController::class, 'update']);
+    Route::delete('/organizations/{orgId}', [OrganizationController::class, 'destroy']);
 
     // users
     Route::get('/organizations/{orgId}/users', [UserController::class, 'index']);
-    Route::get('/organizations/{orgId}/users/{user_id}', [UserController::class, 'show']);
+    Route::get('/organizations/{orgId}/users/{userId}', [UserController::class, 'show']);
     Route::post('/organizations/users', [UserController::class, 'store']);
-    Route::put('/organizations/users/{id}', [UserController::class, 'update']);
-    Route::delete('/organizations/users/{id}', [UserController::class, 'destroy']);
+    Route::put('/organizations/users/{userId}', [UserController::class, 'update']);
+    Route::delete('/organizations/{orgId}/users/{userId}', [UserController::class, 'destroy']);
 
     // projects
     Route::get('/organizations/{orgId}/projects', [ProjectsController::class, 'index']);
-    Route::get('/organizations/{orgId}/projects/{project_id}', [ProjectsController::class, 'show']);
+    Route::get('/organizations/{orgId}/projects/{projectId}', [ProjectsController::class, 'show']);
     Route::post('/organizations/{orgId}/projects', [ProjectsController::class, 'store']);
-    Route::put('/organizations/{orgId}/projects/{id}', [ProjectsController::class, 'update']);
-    Route::delete('/organizations/{orgId}/projects/{id}', [ProjectsController::class, 'destroy']);
-    // invite users
-    Route::post('/organizations/{orgId}/invite_user_role/{roleId}', [InviteController::class, 'store']);
+    Route::put('/organizations/{orgId}/projects/{projectId}', [ProjectsController::class, 'update']);
+    Route::delete('/organizations/{orgId}/projects/{projectId}', [ProjectsController::class, 'destroy']);
+
+
+    // invite users to organization
+    Route::post('/organizations/{orgId}/invite/{roleId}', [InviteController::class, 'inviteToOrganization']);
+
+    // invite users, which exists
+    Route::post('/organizations/{orgId}/projects/{projectId}/invite/{proRoleId}',
+        [InviteController::class, 'inviteToProjectExitsUser']);
+
+    // invite users, which not exists
+//    Route::post('/organizations/{orgId}/invite_project/')
 });

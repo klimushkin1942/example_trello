@@ -34,7 +34,8 @@ class OrganizationTest extends TestCase
     public function test_get_all_organizations()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
-        $response = $this->actingAs($user)->get('/api/organizations', []);
+
+        $response = $this->actingAs($user)->get('/api/organizations?limit=5&offset=0');
         return $response->assertStatus(200);
     }
 

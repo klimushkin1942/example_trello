@@ -6,12 +6,12 @@ use App\Models\Project;
 
 class GetAllProjectAction
 {
-    public function handle($userId, $orgId)
+    public function handle($orgId, $limit, $offset)
     {
         return Project::where('organization_id', $orgId)
             ->orderBy('created_at', 'asc')
-            ->limit(5)
-            ->offset(0)
+            ->limit($limit)
+            ->offset($offset)
             ->get();
     }
 }

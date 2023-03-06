@@ -2,10 +2,14 @@
 
 namespace App\Actions\Users;
 use App\Models\User;
+use App\Models\Organization;
 class DeleteUserAction
 {
-    public function handle(int $userId)
+    public function handle($orgId, $userId)
     {
-        return User::destroy($userId);
+        return Organization::findOrFail($orgId)
+            ->users()
+            ->where('user_id', $userId)
+            ->delete();
     }
 }

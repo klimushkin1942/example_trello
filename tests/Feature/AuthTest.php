@@ -2,11 +2,7 @@
 
 namespace Tests\Feature;
 
-use Database\Factories\UserFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
 use Illuminate\Support\Str;
 
 class AuthTest extends TestCase

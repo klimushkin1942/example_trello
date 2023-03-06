@@ -133,7 +133,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /forgot_password:
+  /forgot-password:
     post:
       summary: Метод отправляет пин-код на почту пользователя, для идентификации.
       description: Метод предназначен для отправки специального кода для подтверждения принадлежности пользователя и текущего аккаунта
@@ -168,7 +168,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       
-  /send_pincode:
+  /send-pincode:
     post:
       summary: Метод отправляет введенный пин-код пользователем на сервер.
       description: Метод предназначен для подтверждения личности данного пользователя и сопровождения на финальный этап сброса пароля
@@ -202,7 +202,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /reset_password:
+  /reset-password:
     post:
       summary: Метод отправляет пароль и пароль-подтверждение на сервер.
       description: Метод предназначен для перезаписи старого пароля на новый.
@@ -292,14 +292,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
                 
-  /organizations/{id}:
+  /organizations/{orgId}:
     get:
       summary: Метод получения организации по идентификатору
       operationId: getOrganizationById
       tags:
         - Organizations
       parameters:
-        - name: id
+        - name: orgId
           in: path
           required: true
           description: Идентификатор организации
@@ -325,7 +325,7 @@ paths:
       tags:
         - Organizations
       parameters:
-        - name: id
+        - name: orgId
           in: path
           required: true
           description: Идентификатор организации
@@ -359,7 +359,7 @@ paths:
       tags:
         - Organizations
       parameters:
-        - name: id
+        - name: orgId
           in: path
           required: true
           description: Идентификатор организации
@@ -376,15 +376,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /organizations/{id}/invite_user_role/{roleId}:
+  /organizations/{orgId}/invite/{roleId}:
     post:
-      summary: Метод добавления людей в организацию
+      summary: Метод приглашения людей в организацию
       description: Метод предназначен для добавления в БД данных нового пользователя, который был приглашен
       operationId: addUserToOrganization
       tags:
         - Organizations
       parameters:
-        - name: id
+        - name: orgId
           in: path
           required: true
           description: Идентификатор организации
@@ -598,12 +598,156 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        
+  /organizations/{orgId}/projects/{projectId}/invite/{roleId}:
+    post:
+      summary: Метод приглашения пользователя из данной организации в данный проект с определенной ролью
+      operationId: inviteUserOfThisOrganization
+      tags:
+        - Projects
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: string
+        - name: roleId
+          in: path
+          required: true
+          description: Идентификатор роли
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Подтверждение успешной отправки приглашения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+                
+  /organizations/{orgId}/users:
+    get:
+      summary: Метод получения списка пользователей в данной организации
+      description: Метод предназначен для получения данных из БД по определенному проекту в определенной организации.
+      operationId: getUsersByOrganization
+      tags:
+        - Users
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Пользователи
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        default:
+            description: Любая неожиданная ситуация
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+                  
+  /organizations/{orgId}/users/{userId}:
+    get:
+      summary: Метод получения одного пользователя в данной организации
+      description: Метод предназначен для получения данных о пользователе в данной организациии
+      operationId: getUserByOrganization
+      tags:
+        - Users
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Пользователи
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+            description: Любая неожиданная ситуация
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+    delete:
+      summary: Метод удаления одного пользователя из данной организации
+      description: Метод предназначен для удаления связи данного пользователя в данной организации
+      operationId: deleteUserFromOrganization
+      tags:
+        - Users
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Пользователи
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+            description: Любая неожиданная ситуация
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
       
                 
 components:
   schemas:
-  
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+    User:
+      type: object
+      required:
+        - name
+        - email
+        - id
+      properties:
+        name:
+          type: string
+          example: "User"
+        email:
+          type: string
+          example: "example_test@mail.com"
+        id:
+          type: string
+          example: "1"
     AcceptUser:
       type: object
       required:

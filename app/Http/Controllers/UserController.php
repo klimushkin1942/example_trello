@@ -7,15 +7,17 @@ use App\Actions\Users\DeleteUserAction;
 use App\Actions\Users\GetAllUserAction;
 use App\Actions\Users\GetOneUserAction;
 use App\Actions\Users\UpdateUserAction;
+use App\Http\Requests\User\GetAllUserRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function index(GetAllUserAction $action)
+    public function index(GetAllUserAction $action, $orgId, GetAllUserRequest $request)
     {
-//        $this->authorize('view-protected-part', [self::class]);
-        return $action->handle();
+        $this->authorize('can-get-all-users', [User::class, $orgId]);
+        return $action->handle($orgId, $request->limit, $request->offset);
     }
 
     public function store(UserStoreRequest $request, CreateUserAction $action)
@@ -23,9 +25,10 @@ class UserController extends Controller
         return $action->handle($request->all());
     }
 
-    public function show($userId, GetOneUserAction $action)
+    public function show(GetOneUserAction $action, $orgId, $userId)
     {
-        return $action->handle($userId);
+        $this->authorize('can-read-user', [User::class, $orgId]);
+        return $action->handle($orgId, $userId);
     }
 
     public function update(UserUpdateRequest $request, $userId, UpdateUserAction $action)
@@ -33,8 +36,9 @@ class UserController extends Controller
         return $action->handle($userId, $request->all());
     }
 
-    public function destroy($userId, DeleteUserAction $action)
+    public function destroy(DeleteUserAction $action, $orgId, $userId)
     {
-        return $action->handle($userId);
+        $this->authorize('can-delete-user', [User::class, $orgId]);
+        return $action->handle($orgId, $userId);
     }
 }

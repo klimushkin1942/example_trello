@@ -2,7 +2,6 @@
 
 namespace App\Actions\ResetPassword;
 
-use App\Mail\MailInvite;
 use App\Mail\MailResetPassword;
 use App\Models\PasswordResets;
 use App\Models\User;
