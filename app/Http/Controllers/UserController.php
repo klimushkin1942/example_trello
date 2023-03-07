@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Organizations\DeleteUserFromOrganization;
 use App\Actions\Users\CreateUserAction;
-use App\Actions\Users\DeleteUserAction;
 use App\Actions\Users\GetAllUserAction;
 use App\Actions\Users\GetOneUserAction;
 use App\Actions\Users\UpdateUserAction;
@@ -36,7 +36,7 @@ class UserController extends Controller
         return $action->handle($userId, $request->all());
     }
 
-    public function destroy(DeleteUserAction $action, $orgId, $userId)
+    public function destroy(DeleteUserFromOrganization $action, $orgId, $userId)
     {
         $this->authorize('can-delete-user', [User::class, $orgId]);
         return $action->handle($orgId, $userId);

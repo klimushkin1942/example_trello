@@ -17,7 +17,7 @@ class OrganizationController extends Controller
 {
     public function index(GetAllOrganizationAction $action, GetAllOrganizationRequest $request)
     {
-        return $action->handle(Auth::id(), $request->limit, $request->offset);
+        return $action->handle(Auth::id(), $request->validated());
     }
 
     public function store(OrganizationStoreRequest $request, CreateOrganizationAction $action)

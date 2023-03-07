@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Actions\Users;
-use App\Models\User;
+namespace App\Actions\Organizations;
 use App\Models\Organization;
-class DeleteUserAction
+
+class DeleteUserFromOrganization
 {
     public function handle($orgId, $userId)
     {

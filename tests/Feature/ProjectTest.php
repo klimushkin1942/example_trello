@@ -44,7 +44,8 @@ class ProjectTest extends TestCase
 
         $organization = User::find($user->id)->organizations()->first();
 
-        $response = $this->actingAs($user)->get('/api/organizations/' . $organization->id . "/projects?limit=5&offset=0");
+        $response = $this->actingAs($user)->json('GET', '/api/organizations/' . $organization->id . '/projects',
+            ['limit' => 5, 'offset' => 0]);
 
         return $response->assertStatus(200);
     }

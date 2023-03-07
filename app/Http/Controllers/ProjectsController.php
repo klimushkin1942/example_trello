@@ -18,7 +18,7 @@ class ProjectsController extends Controller
     public function index(GetAllProjectAction $action, $orgId, GetAllProjectRequest $request)
     {
         $this->authorize('can-get-all-project', [Project::class, $orgId]);
-        return $action->handle($orgId, $request->limit, $request->offset);
+        return $action->handle($orgId, $request->validated());
     }
 
     public function store(ProjectStoreRequest $request, $orgId, CreateProjectAction $action)

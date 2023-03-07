@@ -7,13 +7,13 @@ use App\Models\User;
 
 class GetAllOrganizationAction
 {
-    public function handle($userId, $limit, $offset)
+    public function handle($userId, $credentials)
     {
         return User::findOrFail($userId)
             ->organizations()
             ->orderBy('id', 'asc')
-            ->limit($limit)
-            ->offset($offset)
+            ->limit($credentials['limit'])
+            ->offset($credentials['offset'])
             ->get();
     }
 }

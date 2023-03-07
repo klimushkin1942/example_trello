@@ -6,6 +6,7 @@ use App\Models\Organization;
 use App\Models\UsersOrganizations;
 use App\Models\UsersRolesOrganizations;
 use http\Env\Response;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 use App\Models\User;
 
@@ -34,8 +35,7 @@ class OrganizationTest extends TestCase
     public function test_get_all_organizations()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
-
-        $response = $this->actingAs($user)->get('/api/organizations?limit=5&offset=0');
+        $response = $this->actingAs($user)->json('GET', '/api/organizations', ['limit' => 5, 'offset' => 0]);
         return $response->assertStatus(200);
     }
 
@@ -44,7 +44,7 @@ class OrganizationTest extends TestCase
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
         $organization = UsersOrganizations::where('user_id', $user->id)->first();
 
-        $response = $this->actingAs($user)->get('/api/organizations/' . $organization->organization_id, []);
+        $response = $this->actingAs($user)->get('/api/organizations/' . $organization->organization_id);
 
         $this->assertDatabaseHas('organizations',['id' => $organization->id]);
         return $response->assertStatus(200);
@@ -52,7 +52,6 @@ class OrganizationTest extends TestCase
 
     public function test_put_update_organization()
     {
-
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
         $organization = UsersOrganizations::where('user_id', $user->id)->first();
         $response = $this->actingAs($user)->put('/api/organizations/' . $organization->organization_id, [
