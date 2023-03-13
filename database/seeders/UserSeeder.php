@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Organization;
+use App\Models\Project;
 use App\Models\UsersOrganizations;
 use App\Models\UsersRolesOrganizations;
 use Illuminate\Database\Seeder;
@@ -27,6 +28,14 @@ class UserSeeder extends Seeder
             'name' => 'Организация',
             'description' => 'Описание'
         ]);
+
+        $project = Project::create([
+            'organization_id' => $organization->id,
+            'name' => 'Проект №' . $user->id,
+            'description' => 'Описание №' . $user->id
+        ]);
+
+
 
         UsersRolesOrganizations::create([
             'user_id' => $user->id,

@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\UserController;
+use App\Models\Desk;
+use App\Models\DeskColumn;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Models\User;
@@ -25,7 +27,9 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         User::class => UserContentPolicy::class,
         Organization::class => UserContentPolicy::class,
-        Project::class => UserContentPolicy::class
+        Project::class => UserContentPolicy::class,
+        Desk::class => UserContentPolicy::class,
+        DeskColumn::class => UserContentPolicy::class
     ];
 
     /**

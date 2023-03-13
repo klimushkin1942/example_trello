@@ -23,9 +23,9 @@ class UserContentPolicy
 
     }
 
-    public function isCurrentUser(UsersRolesOrganizations $usersRolesOrganizations, ?UsersRolesProjects $usersRolesProjects)
+    public function isCurrentUser(?UsersRolesOrganizations $usersRolesOrganizations, ?UsersRolesProjects $usersRolesProjects)
     {
-        return $usersRolesOrganizations->user_id === $usersRolesProjects?->user_id;
+        return $usersRolesOrganizations?->user_id === $usersRolesProjects?->user_id;
     }
 
     public function isAdminOrganization(?UsersRolesOrganizations $usersRolesOrganizations)
@@ -224,4 +224,121 @@ class UserContentPolicy
         return Response::deny('Нет доступа');
     }
 
+    public function canCreateDesk(User $user, $orgId)
+    {
+        $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        if ($this->isAdminOrganization($usersRolesOrganization) || $this->isAdminProject($usersRolesProject)) {
+            return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization)) {
+            return Response::allow('User');
+        }
+        return Response::deny('Нет доступа');
+    }
+
+    public function canReadDesk(User $user, $orgId, $projectId)
+    {
+        $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->where('project_id', $projectId)
+            ->first();
+
+        if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)
+            || $this->isAdminProject($usersRolesProject)) {
+            return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization) || $this->isUserProject($usersRolesProject)) {
+            return Response::allow('User');
+        }
+        return Response::deny('Нет доступа');
+    }
+
+    public function canDeleteDesk(User $user, $orgId, $projectId)
+    {
+        $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->where('project_id', $projectId)
+            ->first();
+
+        if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)
+            || $this->isAdminProject($usersRolesProject)) {
+            return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization) || $this->isUserProject($usersRolesProject)) {
+            return Response::allow('User');
+        }
+        return Response::deny('Нет доступа');
+    }
+
+    public function canCreateColumn(User $user, $orgId, $projectId)
+    {
+        $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->where('project_id', $projectId)
+            ->first();
+
+        if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)
+            || $this->isAdminProject($usersRolesProject)) {
+            return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization) || $this->isUserProject($usersRolesProject)) {
+            return Response::allow('User');
+        }
+        return Response::deny('Нет доступа');
+    }
+
+    public function canDeleteColumn(User $user, $orgId, $projectId)
+    {
+        $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->where('project_id', $projectId)
+            ->first();
+
+        if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)
+            || $this->isAdminProject($usersRolesProject)) {
+            return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization) || $this->isUserProject($usersRolesProject)) {
+            return Response::allow('User');
+        }
+        return Response::deny('Нет доступа');
+    }
+
+    public function canUpdateColumn(User $user, $orgId, $projectId)
+    {
+        $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->first();
+
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
+            ->where('organization_id', $orgId)
+            ->where('project_id', $projectId)
+            ->first();
+
+        if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)
+            || $this->isAdminProject($usersRolesProject)) {
+            return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization) || $this->isUserProject($usersRolesProject)) {
+            return Response::allow('User');
+        }
+        return Response::deny('Нет доступа');
+    }
 }
