@@ -1,45 +1,50 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Actions\Auth\LoginUserAction;
 use App\Actions\Auth\LogoutUserAction;
 use App\Actions\Auth\RegisterUserAction;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AuthRegisterRequest;
+use App\Http\Requests\AuthLoginRequest;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use function PHPUnit\Framework\matches;
 
 class AuthController extends Controller
 {
-    public function registerUser(Request $request, RegisterUserAction $action)
-    {
-        $credentials = request()->validate(
-            [
-                'name' => 'required|min:8',
-                'email' => 'required|email|unique',
-                'password' => 'required|min:8'
-            ]);
-
-        return $action->handle($credentials);
+    /**
+     * @param AuthRegisterRequest $request
+     * @param RegisterUserAction $action
+     * @return mixed
+     */
+    public function registerUser (AuthRegisterRequest $request, RegisterUserAction $action) {
+        return $action->handle($request->all());
     }
 
-    public function loginUser(Request $request, LoginUserAction $action)
-    {
-        $credentials = request()->validate(
-            [
-                'email' => 'required|email',
-                'password' => 'required|min:8'
-            ]);
-
-        return $action->handle($credentials);
+    /**
+     * @param AuthLoginRequest $request
+     * @param LoginUserAction $action
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function loginUser (AuthLoginRequest $request, LoginUserAction $action) {
+        $user = User::where('email', $request->email)->first();
+        if (Hash::check($request->password, $user->password)) {
+            return $action->handle($user);
+        }
     }
 
 
-    public function logoutUser(Request $request, LogoutUserAction $action)
+    /**
+     * @param Request $request
+     * @return string
+     */
+    public function logoutUser(Request $request)
     {
-        return $action->handle($request);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return __('User is logout');
     }
 }

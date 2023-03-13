@@ -3,21 +3,16 @@
 namespace App\Actions\Auth;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class LoginUserAction
 {
-    public function handle($data)
+    public function handle($credentials)
     {
-        if (Auth::attempt($data)) {
-            $data->session()->regenerate();
-        }
-
-        return response()->json([
-            'status' => true,
-            'message' => 'User is logged'
-        ], 200);
+        $user = User::where('email', $credentials['email'])->first();
+        return [
+            "result" => 'Авторизация прошла успешно',
+            "id" => $user->id,
+            "token" => $user->createtoken('token')->plainTextToken
+        ];
     }
 }
