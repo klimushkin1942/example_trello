@@ -5,68 +5,36 @@ namespace App\Http\Controllers;
 use App\Actions\Organizations\CreateOrganizationAction;
 use App\Actions\Organizations\DeleteOrganizationAction;
 use App\Actions\Organizations\GetAllOrganizationAction;
+use App\Actions\Organizations\GetOneOrganizationAction;
 use App\Actions\Organizations\UpdateOrganizationAction;
-use App\Http\Requests\OrganizationStoreRequest;
-use App\Models\Organization;
-use App\Models\UsersOrganizations;
-use Illuminate\Http\Request;
+use App\Http\Requests\Organization\OrganizationStoreRequest;
+use App\Http\Requests\Organization\OrganizationUpdateRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index(GetAllOrganizationAction $action)
     {
-        $credentials = UsersOrganizations::where('user_id', $request->user_id)->get();
-        $orgIds = [];
-        foreach ($credentials as $credential) {
-            array_push($orgIds, $credential->organization_id);
-        }
-
-        return Organization::all()->whereIn('id',$orgIds);
+        return $action->handle(Auth::id());
     }
 
-    public function store(OrganizationStoreRequest $request)
+    public function store(OrganizationStoreRequest $request, CreateOrganizationAction $action)
     {
-        $organization = Organization::create([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
-
-        UsersOrganizations::create([
-            'user_id' => $request->user_id,
-            'organization_id' => $organization->id
-        ]);
+        return $action->handle(Auth::id(), $request->all());
     }
 
-    public function show()
+    public function show($orgId, GetOneOrganizationAction $action)
     {
-
+        return $action->handle(Auth::id(), $orgId);
     }
 
-    public function update()
+    public function update(OrganizationUpdateRequest $request, $id, UpdateOrganizationAction $action)
     {
-
+        return $action->handle(Auth::id(), $id, $request->all());
     }
 
-    public function destroy()
+    public function destroy($orgId, DeleteOrganizationAction $action)
     {
-
+        return $action->handle(Auth::id(), $orgId);
     }
-//    public function getAllOrganizations(Request $request, GetAllOrganizationAction $action)
-//    {
-//        return $action->handle($request->all());
-//    }
-//    public function createOrganization(OrganizationStoreRequest $request, CreateOrganizationAction $action)
-//    {
-//        $credentials = $request->all();
-//        return $action->handle($credentials);
-//    }
-//    public function updateOrganization(OrganizationStoreRequest $request, UpdateOrganizationAction $action, $id)
-//    {
-//        $credentials = $request->all();
-//        return $action->handle($credentials, $id);
-//    }
-//    public function deleteOrganization(DeleteOrganizationAction $action, $id)
-//    {
-//        return $action->handle($id);
-//    }
 }

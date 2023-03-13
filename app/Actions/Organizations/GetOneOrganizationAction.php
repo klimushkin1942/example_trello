@@ -2,17 +2,15 @@
 
 namespace App\Actions\Organizations;
 
-use App\Models\Organization;
 use App\Models\User;
 
-class GetAllOrganizationAction
+class GetOneOrganizationAction
 {
-    public function handle($userId)
+    public function handle($userId, $id)
     {
         return User::find($userId)
             ->organizations()
-            ->orderBy('created_at', 'asc')
-            ->limit(5)
+            ->where('organization_id', $id)
             ->get();
     }
 }

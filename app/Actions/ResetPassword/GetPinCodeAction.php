@@ -30,6 +30,6 @@ class GetPinCodeAction
 
         Mail::to($credentials['email'])->send(new MailNotify($dataForMail));
 
-        return __('Mali is sended');
+        return __('mail.send');
     }
 }

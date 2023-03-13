@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ResetPassword;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
-class OrganizationStoreRequest extends FormRequest
+class ResetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +24,8 @@ class OrganizationStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:100',
-            'description' => 'required|string|max:255',
-            'user_id' => 'required|string'
+            'password' => 'required|min:6',
+            'password_confirmation' => 'required|min:6|same:password'
         ];
     }
 }

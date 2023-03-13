@@ -3,16 +3,18 @@
 namespace App\Actions\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginUserAction
 {
-    public function handle($credentials)
+    public function handle(User $user, string $password)
     {
-        $user = User::where('email', $credentials['email'])->first();
-        return [
-            "result" => 'Авторизация прошла успешно',
-            "id" => $user->id,
-            "token" => $user->createtoken('token')->plainTextToken
-        ];
+        if (Hash::check($password, $user->password)) {
+            return [
+                "result" => __('auth.success'),
+                "id" => $user->id,
+                "token" => $user->createtoken('token')->plainTextToken
+            ];
+        }
     }
 }

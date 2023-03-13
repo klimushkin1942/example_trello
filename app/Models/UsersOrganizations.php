@@ -13,4 +13,5 @@ class UsersOrganizations extends Model
         'user_id',
         'organization_id',
     ];
+
 }

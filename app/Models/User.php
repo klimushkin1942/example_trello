@@ -41,6 +41,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+    public function organizations()
+    {
+        return $this->belongsToMany(Organization::class, 'users_organizations');
+    }
+
+    public function resetPassword()
+    {
+        return $this->hasOne(PasswordResets::class);
+    }
+
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);
