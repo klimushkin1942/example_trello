@@ -8,7 +8,8 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectsController;
-
+use App\Http\Controllers\DeskController;
+use App\Http\Controllers\DeskColumnController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -52,14 +53,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/organizations/{orgId}/projects/{projectId}', [ProjectsController::class, 'update']);
     Route::delete('/organizations/{orgId}/projects/{projectId}', [ProjectsController::class, 'destroy']);
 
-
     // invite users to organization
     Route::post('/organizations/{orgId}/invite/{roleId}', [InviteController::class, 'inviteToOrganization']);
 
     // invite users, which exists
-    Route::post('/organizations/{orgId}/projects/{projectId}/invite/{proRoleId}',
-        [InviteController::class, 'inviteToProjectExitsUser']);
+    Route::post('/organizations/{orgId}/projects/{projectId}/invite/{proRoleId}', [InviteController::class, 'inviteToProjectExitsUser']);
 
-    // invite users, which not exists
-//    Route::post('/organizations/{orgId}/invite_project/')
+    // desks
+    Route::get('/organizations/{orgId}/projects/{projectId}/desks/{deskId}', [DeskController::class, 'show']);
+    Route::post('/organizations/{orgId}/projects/{projectId}/desks', [DeskController::class, 'store']);
+    Route::delete('/organizations/{orgId}/projects/{projectId}/desks/{deskId}', [DeskController::class, 'destroy']);
+
+    // desks column
+    Route::post('/organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns', [DeskColumnController::class, 'store']);
+    Route::put('/organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}', [DeskColumnController::class, 'update']);
+    Route::delete('/organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}', [DeskColumnController::class, 'destroy']);
 });

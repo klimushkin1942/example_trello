@@ -724,10 +724,329 @@ paths:
               application/json:
                 schema:
                   $ref: "#/components/schemas/Error"
-      
+  /organizations/{orgId}/projects/{projectId}/desks:
+    post:
+      summary: Метод создание доски внутри проекта
+      operationId: createDeskByProjectId
+      tags:
+        - Desks
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Подтверждение успешной отправки приглашения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
                 
+  /organizations/{orgId}/projects/{projectId}/desks/{deskId}:
+    get:
+      summary: Метод получения данной доски в данном проекте
+      description: Метод предназначен для получения данных о конкретной доске из БД.
+      operationId: getDeskByid
+      tags:
+        - Desks
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: string
+        - name: deskId
+          in: path
+          required: true
+          description: Идентификатор доски
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Пользователи
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Desk"
+        default:
+            description: Любая неожиданная ситуация
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+    delete:
+      summary: Метод удаления данной доски из данного проекта
+      description: Метод предназначен для удаления данных о конкретной доске из БД.
+      operationId:  deleteDeskById
+      tags:
+        - Desks
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: string
+        - name: deskId
+          in: path
+          required: true
+          description: Идентификатор доски
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Доска
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        default:
+            description: Любая неожиданная ситуация
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+  /organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns:
+    post:
+      summary: Метод добавления колонки к конкретной доске внутри проекта
+      operationId: addColumnByDeskId
+      tags:
+        - DeskColumns
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: string
+        - name: deskId
+          in: path
+          required: true
+          description: Идентификатор доски
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Подтверждение успешной отправки приглашения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+  /organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}:
+    delete:
+      summary: Метод удаления данной колонки из данной доски
+      description: Метод предназначен для удаления данных о конкретной колонке из БД.
+      operationId:  deleteColumnById
+      tags:
+        - DeskColumns
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: string
+        - name: deskId
+          in: path
+          required: true
+          description: Идентификатор доски
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          required: true
+          description: Идентификатор колонки
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Доска
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        default:
+            description: Любая неожиданная ситуация
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+    put:
+      summary: Метод обновления столбца на данной доске
+      description: Метод предназначен для обновления в БД данных по имеющемуся проекту в данной организации.
+      operationId: updateColumnByColumnId
+      tags:
+        - DeskColumns
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: string
+        - name: deskId
+          in: path
+          required: true
+          description: Идентификатор доски
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          required: true
+          description: Идентификатор колонки
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/UpdateColumn"
+      responses:
+        '200':
+          "description": Подтверждение успешного обновления
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
+    UpdateColumn:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: "Новое название для колонки"
+    Success:
+      type: object
+      required:
+        - message
+        - status
+      properties:
+        message:
+          type: string
+          example: "Success"
+        status:
+          type: integer
+          example: 200
+    Desk:
+      type: object
+      required:
+        - id
+        - name
+        - project_id
+        - desk_columns
+      properties:
+        id:
+          type: string
+          example: "1"
+        name:
+          type: string
+          example: "Шбалон доски №1"
+        project_id:
+          type: string
+          example: "2"
+        desk_columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeskColumn"
+    DeskColumn:
+      type: object
+      required:
+        - desk_id
+        - status
+        - tasks
+      properties:
+        desk_id:
+          type: string
+          example: "2"
+        status:
+          type: string
+          example: "Колонка №1"
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+    Task:
+      type: object
+      required:
+        - title
+        - description
+        - img_src
+        - elapsed_time
+        - desk_column_id
+      properties:
+        title:
+          type: string
+          example: "Название задачи №1"
+        description:
+          type: string
+          example: "Описание задачи №1"
+        img_src:
+          type: string
+          example: "/images/tasks/task_1.jpg"
+        elapsed_time:
+          type: integer
+          example: 12
+        desk_column_id:
+          type: string
+          example: "3"
     Users:
       type: array
       items:
