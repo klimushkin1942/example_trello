@@ -17,11 +17,7 @@ class CreatePasswordResetsTable extends Migration
             $table->string('email')->index();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnUpdate();
         });
     }
 

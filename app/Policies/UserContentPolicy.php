@@ -7,12 +7,14 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
 use App\Models\UsersRolesProjects;
+use App\Policies\TraitHelper\RolesAuthorization;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
 class UserContentPolicy
 {
     use HandlesAuthorization;
+    use RolesAuthorization;
     /**
      * Create a new policy instance.
      *
@@ -22,6 +24,7 @@ class UserContentPolicy
     {
 
     }
+<<<<<<< HEAD
 
     public function isCurrentUser(UsersRolesOrganizations $usersRolesOrganizations, ?UsersRolesProjects $usersRolesProjects)
     {
@@ -188,6 +191,8 @@ class UserContentPolicy
     }
 
     // users
+=======
+>>>>>>> dea7e3a... fix errors templates
     public function canGetAllUsers(User $user, $orgId)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
@@ -223,5 +228,8 @@ class UserContentPolicy
         }
         return Response::deny('Нет доступа');
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> dea7e3a... fix errors templates
 }

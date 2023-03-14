@@ -10,15 +10,15 @@ use Illuminate\Support\Str;
 
 class GetPinCodeAction
 {
-    public function handle($credentials)
+    public function handle($params)
     {
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::where('email', $params['email'])->first();
 
         $pinCode = Str::random(6);
 
         PasswordResets::create([
             'user_id' => $user->id,
-            'email' => $credentials['email'],
+            'email' => $params['email'],
             'token' => $pinCode,
         ]);
 
@@ -29,7 +29,7 @@ class GetPinCodeAction
                            Введите пожалуйста этот пинкод для дальнейшей процедуры сброса пароля: " . $pinCode
         ];
 
-        Mail::to($credentials['email'])->send(new MailResetPassword($dataForMail));
+        Mail::to($params['email'])->send(new MailResetPassword($dataForMail));
 
         return __('mail.send');
     }

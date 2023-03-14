@@ -18,6 +18,7 @@ class CreateTasksTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->string('img_src');
+<<<<<<< HEAD:database/migrations/2023_02_06_144202_create_tasks_table.php
             $table->string('lead_time');
             $table->unsignedBigInteger('organization_id');
             $table->unsignedBigInteger('project_id');
@@ -32,6 +33,13 @@ class CreateTasksTable extends Migration
                 ->on('projects')
                 ->onDelete('cascade');
 
+=======
+            $table->integer('elapsed_time');
+            $table->foreignId('desk_column_id')
+                ->constrained('desk_columns')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+>>>>>>> dea7e3a... fix errors templates:database/migrations/2023_03_10_101757_create_tasks_table.php
             $table->timestamps();
         });
     }

@@ -10,19 +10,17 @@ use App\Models\UsersRolesProjects;
 
 class CreateProjectAction
 {
-    public function handle($credentials, $orgId, $userId)
+    public function handle($params, Organization $organization, User $user)
     {
-        $organization = Organization::findOrFail($orgId);
-        $user = User::findOrFail($userId);
         $project = Project::create([
             'organization_id' => $organization->id,
-            'name' => $credentials['name'],
-            'description' => $credentials['description']
+            'name' => $params['name'],
+            'description' => $params['description']
         ]);
 
         return UsersRolesProjects::create([
-            'organization_id' => $orgId,
-            'user_id' => $userId,
+            'organization_id' => $organization->id,
+            'user_id' => $user->id,
             'project_id' => $project->id,
             'role_id' => RoleTypes::ADMIN->value
         ]);

@@ -17,29 +17,29 @@ class OrganizationController extends Controller
 {
     public function index(GetAllOrganizationAction $action, GetAllOrganizationRequest $request)
     {
-        return $action->handle(Auth::id(), $request->validated());
+        return $action->handle(Auth::user(), $request->validated());
     }
 
     public function store(OrganizationStoreRequest $request, CreateOrganizationAction $action)
     {
-        return $action->handle(Auth::id(), $request->all());
+        return $action->handle(Auth::user(), $request->validated());
     }
 
     public function show($orgId, GetOneOrganizationAction $action)
     {
         $this->authorize('can-read-organization', [Organization::class, $orgId]);
-        return $action->handle(Auth::id(), $orgId);
+        return $action->handle(Auth::user(), $orgId);
     }
 
     public function update(OrganizationUpdateRequest $request, $orgId, UpdateOrganizationAction $action)
     {
         $this->authorize('can-update-organization', [Organization::class, $orgId]);
-        return $action->handle(Auth::id(), $orgId, $request->all());
+        return $action->handle(Auth::user(), $orgId, $request->validated());
     }
 
     public function destroy($orgId, DeleteOrganizationAction $action)
     {
         $this->authorize('can-delete-organization', [Organization::class, $orgId]);
-        return $action->handle(Auth::id(), $orgId);
+        return $action->handle(Auth::user(), $orgId);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class AuthTest extends TestCase
 {
-    public function test_register_user()
+    public function testRegisterUser()
     {
         $response = $this->post('/api/register', [
             'name' => Str::random(10),
@@ -18,7 +18,7 @@ class AuthTest extends TestCase
         $response->assertCreated();
     }
 
-    public function test_login_user()
+    public function testLoginUser()
     {
         $response = $this->post('/api/login', [
             'email' => 'muhammed1942ali@gmail.com',
@@ -28,7 +28,7 @@ class AuthTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_logout_user()
+    public function testLogoutUser()
     {
         $response = $this->post('/api/logout',[]);
         $response->assertOk();

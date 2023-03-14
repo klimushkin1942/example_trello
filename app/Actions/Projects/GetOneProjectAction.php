@@ -6,7 +6,7 @@ use App\Models\Project;
 
 class GetOneProjectAction
 {
-    public function handle($orgId, $projectId)
+    public function handle($projectId)
     {
         return Project::findOrFail($projectId);
     }

@@ -9,7 +9,7 @@ use App\Models\UsersOrganizations;
 
 class UserTest extends TestCase
 {
-    public function test_get_all_users()
+    public function testGetAllUsers()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 
@@ -30,7 +30,7 @@ class UserTest extends TestCase
         return $response->assertStatus(200);
     }
 
-    public function test_get_one_users()
+    public function testGetOneUsers()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
         $userCompanyId = User::where('name', 'testUserForCompany')->first()->id;
@@ -39,7 +39,7 @@ class UserTest extends TestCase
         return $response->assertStatus(200);
     }
 
-    public function test_delete_user_from_organization()
+    public function testDeleteUserFromOrganization()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
         $userCompany = User::where('name', 'testUserForCompany')->first();

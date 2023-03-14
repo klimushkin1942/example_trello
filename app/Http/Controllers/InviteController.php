@@ -19,7 +19,6 @@ class InviteController extends Controller
         return $action->handle($request->validated(), $orgId, $roleId);
     }
 
-
     public function inviteToProjectExitsUser(InviteProjectStoreRequest $request, $orgId,
                                                                        $projectId, $roleProId, SendInviteProjectAction $action)
     {

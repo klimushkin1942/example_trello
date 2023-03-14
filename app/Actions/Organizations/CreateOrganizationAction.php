@@ -9,18 +9,18 @@ use App\Enums\RoleTypes;
 class CreateOrganizationAction
 {
 
-    public function handle($userId, $credentials)
+    public function handle(User $user, $params)
     {
-        $organization = User::findOrFail($userId)
+        $organization = User::findOrFail($user->id)
             ->organizations()
             ->create(
                 [
-                    'name' => $credentials['name'],
-                    'description' => $credentials['description']
+                    'name' => $params['name'],
+                    'description' => $params['description']
                 ]);
 
-        UsersRolesOrganizations::create([
-            'user_id' => $userId,
+        return UsersRolesOrganizations::create([
+            'user_id' => $user->id,
             'organization_id' => $organization->id,
             'role_id' => RoleTypes::ADMIN->value
         ]);

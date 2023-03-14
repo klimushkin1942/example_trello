@@ -7,11 +7,9 @@ class AcceptInviteOrganizationAction
 {
     public function handle($token)
     {
-        if (!$invite = Invite::where('token', $token)->first()) {
-            abort(404);
-        }
+        $invite = Invite::where('token', $token)->firstOrFail();
 
-        $user = User::where('email', $invite->email)->first();
+        $user = User::where('email', $invite->email)->firstOrFail();
 
         $invite->delete();
         return [

@@ -6,16 +6,11 @@ use App\Models\Project;
 
 class UpdateProjectAction
 {
-    public function handle($orgId, $credentials, $projectId)
+    public function handle($params, $project)
     {
-        $project = Project::findOrFail($projectId);
-        $project->update([
-            'name' => $credentials['name'],
-            'description' => $credentials['description']
+        return $project->update([
+            'name' => $params['name'],
+            'description' => $params['description']
         ]);
-//        return Project::where('organization_id', $orgId)->where('id', $projectId)->update([
-//            'name' => $credentials['name'],
-//            'description' => $credentials['description']
-//        ]);
     }
 }

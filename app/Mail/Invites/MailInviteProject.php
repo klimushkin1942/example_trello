@@ -18,7 +18,7 @@ class MailInviteProject extends Mailable
 
     public function build()
     {
-        return $this->from('klimushkin_test@mail.ru', $this->data['name'])
+        return $this->from(config('mail.from'), $this->data['name'])
             ->subject($this->data['subject'])
             ->view('emails.invite_user_project')->with('data', $this->data);
     }

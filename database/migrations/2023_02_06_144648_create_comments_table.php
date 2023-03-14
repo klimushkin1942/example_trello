@@ -18,6 +18,7 @@ class CreateCommentsTable extends Migration
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('user_id');
             $table->string('description');
+<<<<<<< HEAD:database/migrations/2023_02_06_144648_create_comments_table.php
 
             $table->foreign('task_id')
                 ->references('id')
@@ -28,6 +29,14 @@ class CreateCommentsTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
+=======
+            $table->string('img_src');
+            $table->integer('elapsed_time');
+            $table->foreignId('desk_column_template_id')
+                ->constrained('desk_columns_templates')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+>>>>>>> dea7e3a... fix errors templates:database/migrations/2023_03_10_130201_create_task_templates_table.php
 
             $table->timestamps();
         });

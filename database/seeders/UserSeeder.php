@@ -17,17 +17,25 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create([
-            'name' => 'Артемий',
-            'email' => 'muhammed1942ali@gmail.com',
-            'password' => 'klimushkin1942'
-        ]);
+        $user = User::firstOrCreate(
+            ['name' => 'Артемий'],
+            ['email' => 'muhammed1942ali@gmail.com', 'password' => 'klimushkin1942']
+        );
 
         $organization = User::findOrFail($user->id)->organizations()->create([
             'name' => 'Организация',
             'description' => 'Описание'
         ]);
 
+<<<<<<< HEAD
+=======
+        $project = Project::create([
+            'organization_id' => $organization->id,
+            'name' => 'Проект №' . $user->id,
+            'description' => 'Описание №' . $user->id
+        ]);
+
+>>>>>>> dea7e3a... fix errors templates
         UsersRolesOrganizations::create([
             'user_id' => $user->id,
             'organization_id' => $organization->id,
