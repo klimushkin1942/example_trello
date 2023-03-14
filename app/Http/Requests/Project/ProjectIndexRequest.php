@@ -24,7 +24,7 @@ class ProjectIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'organization_id' => 'required|string'
+            'organization_id' => 'required|string|exists:organizations,id'
         ];
     }
 }

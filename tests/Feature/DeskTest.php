@@ -16,7 +16,7 @@ class DeskTest extends TestCase
      *
      * @return void
      */
-    public function test_create_desk()
+    public function testCreateDesk()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 
@@ -47,7 +47,7 @@ class DeskTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_delete_desk()
+    public function testDeleteDesk()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 

@@ -2,14 +2,12 @@
 
 namespace App\Actions\Organizations;
 use App\Models\Organization;
+use App\Models\User;
 
 class DeleteUserFromOrganization
 {
-    public function handle($orgId, $userId)
+    public function handle(Organization $organization, User $user)
     {
-        return Organization::findOrFail($orgId)
-            ->users()
-            ->where('user_id', $userId)
-            ->delete();
+        return $organization->users()->where('user_id', $user->id)->delete();
     }
 }

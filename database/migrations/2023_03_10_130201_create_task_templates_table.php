@@ -20,13 +20,10 @@ class CreateTaskTemplatesTable extends Migration
             $table->string('description');
             $table->string('img_src');
             $table->integer('elapsed_time');
-            $table->unsignedBigInteger('desk_column_template_id');
-
-            $table->foreign('desk_column_template_id')
-                ->references('id')
-                ->on('desk_columns_templates')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreignId('desk_column_template_id')
+                ->constrained('desk_columns_templates')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->timestamps();
         });

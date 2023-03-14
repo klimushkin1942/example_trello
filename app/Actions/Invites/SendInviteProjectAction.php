@@ -12,10 +12,10 @@ use App\Mail\Invites\MailInviteProject;
 
 class SendInviteProjectAction
 {
-    public function handle($credentials, $orgId, $projectId, $projectRoleId)
+    public function handle($params, $orgId, $projectId, $projectRoleId)
     {
         $organization = Organization::findOrFail($orgId);
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::where('email', $params['email'])->firstOrFail();
         $project = Project::findOrFail($projectId);
         $token = Str::random(10);
 
@@ -34,11 +34,11 @@ class SendInviteProjectAction
         ];
 
         Invite::create([
-            'email' => $credentials['email'],
+            'email' => $params['email'],
             'token' => $token,
             'organization_id' => $organization->id
         ]);
 
-        return Mail::to($credentials['email'])->send(new MailInviteProject($dataForMail));
+        return Mail::to($params['email'])->send(new MailInviteProject($dataForMail));
     }
 }

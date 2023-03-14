@@ -2,12 +2,13 @@
 
 namespace App\Actions\Projects;
 
+use App\Models\Organization;
 use App\Models\Project;
 
 class DeleteProjectAction
 {
-    public function handle($orgId, $projectId)
+    public function handle(Organization $organization, Project $project)
     {
-        return Project::where('organization_id', $orgId)->where('id', $projectId)->delete();
+        return $project->delete();
     }
 }

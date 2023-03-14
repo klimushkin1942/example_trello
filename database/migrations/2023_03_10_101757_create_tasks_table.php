@@ -19,14 +19,10 @@ class CreateTasksTable extends Migration
             $table->string('description');
             $table->string('img_src');
             $table->integer('elapsed_time');
-            $table->unsignedBigInteger('desk_column_id');
-
-            $table->foreign('desk_column_id')
-                ->references('id')
-                ->on('desk_columns')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
+            $table->foreignId('desk_column_id')
+                ->constrained('desk_columns')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }

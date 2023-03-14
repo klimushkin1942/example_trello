@@ -6,11 +6,8 @@ use App\Models\User;
 
 class GetOneOrganizationAction
 {
-    public function handle($userId, $id)
+    public function handle(User $user, $orgId)
     {
-        return User::findOrFail($userId)
-            ->organizations()
-            ->where('organization_id', $id)
-            ->first();
+        return $user->organizations()->where('organization_id', $orgId)->first();
     }
 }

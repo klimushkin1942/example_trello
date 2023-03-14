@@ -15,16 +15,11 @@ class CreateDeskColumnsTemplatesTable extends Migration
     {
         Schema::create('desk_columns_templates', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBigInteger('desk_template_id');
+            $table->foreignId('desk_template_id')
+                ->constrained('desks_templates')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('status');
-
-            $table->foreign('desk_template_id')
-                ->references('id')
-                ->on('desks_templates')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
             $table->timestamps();
         });
     }

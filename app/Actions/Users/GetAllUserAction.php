@@ -5,13 +5,13 @@ use App\Models\Organization;
 use App\Models\User;
 class GetAllUserAction
 {
-    public function handle($orgId, $limit, $offset)
+    public function handle($orgId, $params)
     {
         return Organization::findOrFail($orgId)
             ->users()
             ->orderBy('id', 'asc')
-            ->limit($limit)
-            ->offset($offset)
+            ->limit($params['limit'])
+            ->offset($params['offset'])
             ->get();
     }
 }

@@ -14,33 +14,31 @@ use Illuminate\Http\Request;
 
 class ResetPasswordController extends Controller
 {
-
     public function getPinCode(GetPincodeRequest $request, GetPinCodeAction $action)
     {
-        return $action->handle($request->all());
+        return $action->handle($request->validated());
     }
 
 
     public function sendPinCode(Request $request, SendPinCodeAction $action)
     {
-        $credentials = $request->all();
+        $params = $request->all();
 
-        if (!PasswordResets::where('token', $credentials['pincode'])) {
+        if (!PasswordResets::where('token', $params['pinCode'])) {
             return ['status' => false, 'message' => __('mail.failed')];
         }
-        return $action->handle($credentials);
+        return $action->handle($params);
     }
 
 
     public function resetPassword(ResetPasswordRequest $request, ResetPasswordAction $action)
     {
-        $credentials = $request->all();
-
-        $passwordResetUser = PasswordResets::where('email', 'muhammed1942ali@gmail.com')->orderBy('id', 'desc')->first();
+        $params = $request->validated();
+        $passwordResetUser = PasswordResets::where('token', $params['pinCode'])->orderBy('id', 'desc')->first();
 
         if ($passwordResetUser->created_at->diffInMinutes(Carbon::now()) > 30) {
             return __('mail.time_out');
         }
-        return $action->handle($credentials, $passwordResetUser->user_id);
+        return $action->handle($params, $passwordResetUser->user_id);
     }
 }

@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class ProjectTest extends TestCase
 {
-    public function test_post_create_project()
+    public function testPostCreateProject()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 
@@ -38,7 +38,7 @@ class ProjectTest extends TestCase
         return $response->assertStatus(201);
     }
 
-    public function test_get_all_projects()
+    public function testGetAllProjects()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 
@@ -50,7 +50,7 @@ class ProjectTest extends TestCase
         return $response->assertStatus(200);
     }
 
-    public function test_get_one_project()
+    public function testGetOneProject()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 
@@ -65,7 +65,7 @@ class ProjectTest extends TestCase
         return $response->assertStatus(200);
     }
 
-    public function test_put_update_project()
+    public function testPutUpdateProject()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 
@@ -87,7 +87,7 @@ class ProjectTest extends TestCase
         return $response->assertStatus(200);
     }
 
-    public function test_delete_project()
+    public function testDeleteProject()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 

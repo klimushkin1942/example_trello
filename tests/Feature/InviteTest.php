@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class InviteTest extends TestCase
 {
-    public function test_post_send_invite_user()
+    public function testPostSendInviteUser()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
         $orgId = UsersOrganizations::where('user_id', $user->id)->first()->organization_id;
@@ -26,16 +26,21 @@ class InviteTest extends TestCase
         return $response->assertStatus(200);
     }
 
-    public function test_post_accept_invite()
+    public function testPostAcceptInvite()
     {
         $invite = Invite::where('email', 'lina.vasilenko.2001@mail.ru')->first();
         $response = $this->get('/api/accept/' . $invite->token);
         return $response->assertStatus(200);
     }
 
-    public function test_delete_invite_user()
+    public function testDeleteInviteUser()
     {
-        User::where('email', 'lina.vasilenko.2001@mail.ru')->delete();
-        return $this->assertDatabaseMissing('users', ['email' => 'lina.vasilenko.2001@mail.ru']);
+        $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
+        $orgId = UsersOrganizations::where('user_id', $user->id)->first()->organization_id;
+        $userInvited = User::where('email', 'lina.vasilenko.2001@mail.ru')->first();
+        $response = $this->actingAs($user)->delete('/api/organizations/ ' . $orgId . '/users/' .  $userInvited->id, []);
+        $userInvited->delete();
+        $this->assertDatabaseMissing('users', ['email' => 'lina.vasilenko.2001@mail.ru']);
+        return $response->assertStatus(200);
     }
 }

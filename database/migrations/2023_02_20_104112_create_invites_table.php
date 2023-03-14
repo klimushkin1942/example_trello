@@ -15,15 +15,11 @@ class CreateInvitesTable extends Migration
     {
         Schema::create('invites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('organization_id');
+            $table->foreignId('organization_id')->constrained('organizations')
+                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('email');
             $table->string('token', 16)->unique();
             $table->timestamps();
-
-            $table->foreign('organization_id')
-                ->references('id')
-                ->on('organizations')
-                ->onDelete('cascade');
         });
     }
 

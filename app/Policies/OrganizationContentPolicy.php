@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Enums\RoleTypes;
-use App\Models\Role;
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
 use App\Models\UsersRolesProjects;
@@ -11,10 +10,11 @@ use App\Policies\TraitHelper\RolesAuthorization;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class UserContentPolicy
+class OrganizationContentPolicy
 {
     use HandlesAuthorization;
     use RolesAuthorization;
+
     /**
      * Create a new policy instance.
      *
@@ -22,9 +22,9 @@ class UserContentPolicy
      */
     public function __construct()
     {
-
+        //
     }
-    public function canGetAllUsers(User $user, $orgId)
+    public function canUpdateOrganization(User $user, $orgId)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
             ->where('organization_id', $orgId)
@@ -36,7 +36,7 @@ class UserContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canReadUser(User $user, $orgId)
+    public function canReadOrganization(User $user, $orgId)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
             ->where('organization_id', $orgId)
@@ -44,11 +44,13 @@ class UserContentPolicy
 
         if ($this->isAdminOrganization($usersRolesOrganization)) {
             return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization)) {
+            return Response::allow('User');
         }
         return Response::deny('Нет доступа');
     }
 
-    public function canDeleteUser(User $user, $orgId)
+    public function canDeleteOrganization(User $user, $orgId)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
             ->where('organization_id', $orgId)

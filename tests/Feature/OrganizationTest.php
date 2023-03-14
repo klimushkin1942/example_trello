@@ -15,31 +15,31 @@ class OrganizationTest extends TestCase
     /**
      * @return \Illuminate\Testing\TestResponse
      */
-    public function test_post_create_organization()
+    public function testPostCreateOrganization()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
 
         $response = $this->actingAs($user)->post('/api/organizations', [
-            'name' => 'Привет, что-то там...',
+            'name' => 'Созданная',
             'description' => 'Как там и что',
         ]);
 
         $this->assertDatabaseHas('organizations', [
-            'name' => 'Привет, что-то там...',
+            'name' => 'Созданная',
             'description' => 'Как там и что',
         ]);
 
-        return $response->assertStatus(200);
+        return $response->assertStatus(201);
     }
 
-    public function test_get_all_organizations()
+    public function testGetAllOrganizations()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
         $response = $this->actingAs($user)->json('GET', '/api/organizations', ['limit' => 5, 'offset' => 0]);
         return $response->assertStatus(200);
     }
 
-    public function test_get_one_organization()
+    public function testGetOneOrganization()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
         $organization = UsersOrganizations::where('user_id', $user->id)->first();
@@ -50,7 +50,7 @@ class OrganizationTest extends TestCase
         return $response->assertStatus(200);
     }
 
-    public function test_put_update_organization()
+    public function testPutUpdateOrganization()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
         $organization = UsersOrganizations::where('user_id', $user->id)->first();
@@ -68,7 +68,7 @@ class OrganizationTest extends TestCase
         return $response->assertStatus(200);
     }
 
-    public function test_delete_organization()
+    public function testDeleteOrganization()
     {
         $orgId = UsersRolesOrganizations::first()->organization_id;
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();

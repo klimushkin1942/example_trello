@@ -16,14 +16,8 @@ class CreateDesksTable extends Migration
         Schema::create('desks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('project_id')->nullable();
-
-            $table->foreign('project_id')
-                ->references('id')
-                ->on('projects')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
+            $table->foreignId('project_id')->nullable()
+                ->constrained('projects')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

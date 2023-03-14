@@ -24,8 +24,8 @@ class UserIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'limit' => 'required|integer',
-            'offset' => 'required|integer'
+            'limit' => 'required|integer|min:0|max:10',
+            'offset' => 'required|integer|min:0'
         ];
     }
 }
