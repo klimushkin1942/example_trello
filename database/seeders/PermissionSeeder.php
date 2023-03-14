@@ -14,19 +14,9 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $readOrganizations = new Permission();
-        $readOrganizations->name = "Read organizations";
-        $readOrganizations->slug = "read-organizations";
-        $readOrganizations->save();
-
-        $deleteOrganizations = new Permission();
-        $deleteOrganizations->name = "Delete organizations";
-        $deleteOrganizations->slug = "delete-organizations";
-        $deleteOrganizations->save();
-
-        $createOrganizations = new Permission();
-        $createOrganizations->name = "Create organizations";
-        $createOrganizations->slug = "create-organizations";
-        $createOrganizations->save();
+        Permission::create(['name' => 'show organizations']);
+        Permission::create(['name' => 'add organizations']);
+        Permission::create(['name' => 'edit organizations']);
+        Permission::create(['name' => 'delete organizations']);
     }
 }

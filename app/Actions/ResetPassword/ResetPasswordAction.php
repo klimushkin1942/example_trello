@@ -6,10 +6,10 @@ use App\Models\User;
 
 class ResetPasswordAction
 {
-    public function handle($credentials, $userId)
+    public function handle($params, $userId)
     {
-        $user = User::find($userId);
-        $user->password = $credentials['password'];
+        $user = User::findOrFail($userId);
+        $user->password = $params['password'];
         $user->save();
         return __('passwords.reset');
     }

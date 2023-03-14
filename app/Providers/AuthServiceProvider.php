@@ -2,8 +2,20 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\UserController;
+use App\Models\Organization;
+use App\Models\Project;
+use App\Models\User;
+use App\Models\UsersOrganizations;
+use App\Policies\DeskContentPolicy;
+use App\Policies\OrganizationContentPolicy;
+use App\Policies\ProjectContentPolicy;
+use App\Policies\UserContentPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,6 +26,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        User::class => UserContentPolicy::class,
+<<<<<<< HEAD
+        Organization::class => UserContentPolicy::class,
+        Project::class => UserContentPolicy::class
+=======
+        Organization::class => OrganizationContentPolicy::class,
+        Project::class => ProjectContentPolicy::class,
+        Desk::class => DeskContentPolicy::class,
+        DeskColumn::class => DeskContentPolicy::class
+>>>>>>> dea7e3a... fix errors templates
     ];
 
     /**
@@ -24,7 +46,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
     }
 }

@@ -20,7 +20,7 @@ class AuthController extends Controller
      */
     public function registerUser(AuthRegisterRequest $request, RegisterUserAction $action)
     {
-        return $action->handle($request->all());
+        return $action->handle($request->validated());
     }
 
     /**
@@ -31,9 +31,8 @@ class AuthController extends Controller
     public function loginUser(AuthLoginRequest $request, LoginUserAction $action)
     {
         $user = User::where('email', $request->email)->first();
-        return $action->handle($user, $request->password);
+        return $action->handle($user, $request->validated());
     }
-
 
     /**
      * @param Request $request

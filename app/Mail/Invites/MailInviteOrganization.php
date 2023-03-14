@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Invites;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class MailNotify extends Mailable
+class MailInviteOrganization extends Mailable
 {
     use Queueable, SerializesModels;
     private $data = [];
@@ -28,8 +27,8 @@ class MailNotify extends Mailable
      */
     public function build()
     {
-        return $this->from('klimushkin_test@mail.ru', 'Сброс пароля')
+        return $this->from(config('mail.from'), $this->data['name'])
             ->subject($this->data['subject'])
-            ->view('emails.index')->with('data', $this->data);
+            ->view('emails.invite_user_organization')->with('data', $this->data);
     }
 }
