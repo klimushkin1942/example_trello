@@ -21,7 +21,7 @@ class ResetPasswordTest extends TestCase
     {
         $passwordResets = PasswordResets::where('email', 'muhammed1942ali@gmail.com')->orderBy('id', 'desc')->first();
         $response = $this->post('/api/send_pincode', [
-            'pinCode' => $passwordResets->token,
+            'pin_code' => $passwordResets->token,
         ]);
         return $response->assertStatus(200);
     }

@@ -7,6 +7,7 @@ use App\Actions\ResetPassword\ResetPasswordAction;
 use App\Actions\ResetPassword\SendPinCodeAction;
 use App\Http\Requests\ResetPassword\GetPincodeRequest;
 use App\Http\Requests\ResetPassword\ResetPasswordRequest;
+use App\Http\Requests\ResetPassword\SendPincodeRequest;
 use App\Models\PasswordResets;
 use App\Models\User;
 use Carbon\Carbon;
@@ -20,11 +21,11 @@ class ResetPasswordController extends Controller
     }
 
 
-    public function sendPinCode(Request $request, SendPinCodeAction $action)
+    public function sendPinCode(SendPincodeRequest $request, SendPinCodeAction $action)
     {
-        $params = $request->all();
+        $params = $request->validated();
 
-        if (!PasswordResets::where('token', $params['pinCode'])) {
+        if (!PasswordResets::where('token', $params['pin_code'])) {
             return ['status' => false, 'message' => __('mail.failed')];
         }
         return $action->handle($params);

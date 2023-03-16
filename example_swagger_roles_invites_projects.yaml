@@ -4,8 +4,8 @@ info:
   version: 0.0.1
 servers:
   - url: http://localhost:8080/api/
-    description: Dev server  
-  
+    description: Dev server
+
 paths:
   /register:
     post:
@@ -105,7 +105,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  
+
   /accept/{token}:
     get:
       summary: Метод принятия пользователя в организацию
@@ -167,7 +167,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      
+
   /send-pincode:
     post:
       summary: Метод отправляет введенный пин-код пользователем на сервер.
@@ -237,9 +237,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-
   /organizations:
     get:
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которое необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
       summary: Метод получения организаций
       description: Метод предназначен для получения списка всех организаций, сохраненных в БД.
       operationId: getOrganizations
@@ -291,7 +301,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-                
+
   /organizations/{orgId}:
     get:
       summary: Метод получения организации по идентификатору
@@ -395,7 +405,7 @@ paths:
           required: true
           description: Идентификатор роли
           schema:
-            type: integer      
+            type: integer
       requestBody:
         required: true
         content:
@@ -425,6 +435,7 @@ paths:
                 $ref: "#/components/schemas/Error"
   /organizations/{orgId}/projects:
     get:
+
       summary: Метод получения проектов по идентификатору организации
       operationId: getProjectsById
       tags:
@@ -436,6 +447,16 @@ paths:
           description: Идентификатор организации
           schema:
             type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которое необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
       responses:
         '200':
           description: Проект
@@ -489,7 +510,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-                
+
   /organizations/{orgId}/projects/{projectId}:
     get:
       summary: Метод получения одного проекта в данной организации
@@ -518,11 +539,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Projects"
         default:
-            description: Любая неожиданная ситуация
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Error"
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     put:
       summary: Метод обновления проекта данной организации
       description: Метод предназначен для обновления в БД данных по имеющемуся проекту в данной организации.
@@ -630,7 +651,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Project"
-                
+
   /organizations/{orgId}/users:
     get:
       summary: Метод получения списка пользователей в данной организации
@@ -645,6 +666,16 @@ paths:
           description: Идентификатор организации
           schema:
             type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которое необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
       responses:
         '200':
           description: Пользователи
@@ -653,12 +684,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/Users"
         default:
-            description: Любая неожиданная ситуация
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Error"
-                  
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /organizations/{orgId}/users/{userId}:
     get:
       summary: Метод получения одного пользователя в данной организации
@@ -687,11 +718,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/User"
         default:
-            description: Любая неожиданная ситуация
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Error"
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       summary: Метод удаления одного пользователя из данной организации
       description: Метод предназначен для удаления связи данного пользователя в данной организации
@@ -719,11 +750,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/User"
         default:
-            description: Любая неожиданная ситуация
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Error"
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     UpdateColumn:
