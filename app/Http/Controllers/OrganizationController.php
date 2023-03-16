@@ -25,21 +25,21 @@ class OrganizationController extends Controller
         return $action->handle(Auth::user(), $request->validated());
     }
 
-    public function show($orgId, GetOneOrganizationAction $action)
+    public function show(Organization $org, GetOneOrganizationAction $action)
     {
-        $this->authorize('can-read-organization', [Organization::class, $orgId]);
-        return $action->handle(Auth::user(), $orgId);
+        $this->authorize('can-read-organization', [Organization::class, $org]);
+        return $action->handle(Auth::user(), $org);
     }
 
-    public function update(OrganizationUpdateRequest $request, $orgId, UpdateOrganizationAction $action)
+    public function update(OrganizationUpdateRequest $request, Organization $org, UpdateOrganizationAction $action)
     {
-        $this->authorize('can-update-organization', [Organization::class, $orgId]);
-        return $action->handle(Auth::user(), $orgId, $request->validated());
+        $this->authorize('can-update-organization', [Organization::class, $org]);
+        return $action->handle(Auth::user(), $org, $request->validated());
     }
 
-    public function destroy($orgId, DeleteOrganizationAction $action)
+    public function destroy(Organization $org, DeleteOrganizationAction $action)
     {
-        $this->authorize('can-delete-organization', [Organization::class, $orgId]);
-        return $action->handle(Auth::user(), $orgId);
+        $this->authorize('can-delete-organization', [Organization::class, $org]);
+        return $action->handle(Auth::user(), $org);
     }
 }

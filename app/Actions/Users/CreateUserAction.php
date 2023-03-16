@@ -5,8 +5,8 @@ use App\Models\User;
 
 class CreateUserAction
 {
-    public function handle($credentials)
+    public function handle($params)
     {
-        return User::create($credentials);
+        return User::create($params);
     }
 }

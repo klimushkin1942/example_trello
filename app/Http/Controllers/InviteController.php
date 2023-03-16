@@ -11,18 +11,22 @@ use App\Actions\Invites\SendInviteProjectNotExistsUserAction;
 use App\Http\Requests\Invite\InviteProjectStoreRequest;
 use App\Http\Requests\Invite\InviteOrganizationStoreRequest;
 use App\Models\Invite;
+use App\Models\Organization;
+use App\Models\Project;
 
 class InviteController extends Controller
 {
-    public function inviteToOrganization(InviteOrganizationStoreRequest $request, $orgId, $roleId, SendInviteOrganizationAction $action)
+    public function inviteToOrganization(InviteOrganizationStoreRequest $request, Organization $org, $roleId, SendInviteOrganizationAction $action)
     {
-        return $action->handle($request->validated(), $orgId, $roleId);
+        $this->authorize('can-invite-users-to-organization', [Invite::class, $org]);
+        return $action->handle($request->validated(), $org, $roleId);
     }
 
-    public function inviteToProjectExitsUser(InviteProjectStoreRequest $request, $orgId,
-                                                                       $projectId, $roleProId, SendInviteProjectAction $action)
+    public function inviteToProjectExistUser(InviteProjectStoreRequest $request, Organization $org,
+                                                                       Project $project, $roleProId, SendInviteProjectAction $action)
     {
-        return $action->handle($request->validated(), $orgId, $projectId, $roleProId);
+        $this->authorize('can-invite-users-to-project', [Invite::class, $org, $project]);
+        return $action->handle($request->validated(), $org, $project, $roleProId);
     }
 
     public function acceptInviteToOrganization($token, AcceptInviteOrganizationAction $action)

@@ -24,7 +24,7 @@ class SendPincodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'pincode' => 'required|min:6'
+            'pinCode' => 'required|string|min:6|max:6'
         ];
     }
 }

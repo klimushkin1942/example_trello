@@ -15,10 +15,10 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function index(GetAllUserAction $action, $orgId, GetAllUserRequest $request)
+    public function index(GetAllUserAction $action, Organization $org, GetAllUserRequest $request)
     {
-        $this->authorize('can-get-all-users', [User::class, $orgId]);
-        return $action->handle($orgId, $request->validated());
+        $this->authorize('can-get-all-users', [User::class, $org]);
+        return $action->handle($org, $request->validated());
     }
 
     public function store(UserStoreRequest $request, CreateUserAction $action)
@@ -26,20 +26,20 @@ class UserController extends Controller
         return $action->handle($request->validated());
     }
 
-    public function show(GetOneUserAction $action, $orgId, $userId)
+    public function show(GetOneUserAction $action, Organization $org, User $user)
     {
-        $this->authorize('can-read-user', [User::class, $orgId]);
-        return $action->handle($orgId, $userId);
+        $this->authorize('can-read-user', [User::class, $org]);
+        return $action->handle($org, $user);
     }
 
-    public function update(UserUpdateRequest $request, $userId, UpdateUserAction $action)
+    public function update(UserUpdateRequest $request, User $user, UpdateUserAction $action)
     {
-        return $action->handle($userId, $request->validated());
+        return $action->handle($user, $request->validated());
     }
 
-    public function destroy(DeleteUserFromOrganization $action, $orgId, $userId)
+    public function destroy(DeleteUserFromOrganization $action, Organization $org, User $user)
     {
-        $this->authorize('can-delete-user', [User::class, $orgId]);
-        return $action->handle(Organization::findOrFail($orgId), User::findOrFail($userId));
+        $this->authorize('can-delete-user', [User::class, $org]);
+        return $action->handle($org, $user);
     }
 }
