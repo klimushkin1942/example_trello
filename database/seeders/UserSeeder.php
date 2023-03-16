@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Organization;
+use App\Models\Project;
 use App\Models\UsersOrganizations;
 use App\Models\UsersRolesOrganizations;
 use Illuminate\Database\Seeder;
@@ -27,15 +28,12 @@ class UserSeeder extends Seeder
             'description' => 'Описание'
         ]);
 
-<<<<<<< HEAD
-=======
         $project = Project::create([
             'organization_id' => $organization->id,
             'name' => 'Проект №' . $user->id,
             'description' => 'Описание №' . $user->id
         ]);
 
->>>>>>> dea7e3a... fix errors templates
         UsersRolesOrganizations::create([
             'user_id' => $user->id,
             'organization_id' => $organization->id,
