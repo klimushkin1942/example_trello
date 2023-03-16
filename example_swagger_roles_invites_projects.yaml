@@ -1,0 +1,977 @@
+openapi: 3.0.0
+info:
+  title: OpenAPI спецификация example_trello
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/
+    description: Dev server
+
+paths:
+  /register:
+    post:
+      summary: Метод регистрации пользователя в системе
+      description: Метод предназначен для сохранения в БД данных по новому пользователю.
+      operationId: createUser
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUser"
+      responses:
+        '200':
+          description: Подтверждение успешного сохранения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUser"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /login:
+    post:
+      summary: Метод авторизации пользователя в системе
+      description: Метод предназначен для авторизации и входа в систему пользователя.
+      operationId: loginUser
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUser"
+      responses:
+        '200':
+          description: Подтверждение успешного входа в систему
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Некорректное входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /logout:
+    post:
+      summary: Метод выхода пользователя из системы
+      description: Метод предназначен для удаления сессии из браузера пользователя
+      operationId: logoutUser
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUser"
+      responses:
+        '200':
+          description: Подтверждение успешного выхода из системы
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /accept/{token}:
+    get:
+      summary: Метод принятия пользователя в организацию
+      description: Метод предназначен для подтверждение перехода данного пользователя по ссылке и его авторизации в системе.
+      operationId: acceptUserToOrganization
+      tags:
+        - Auth
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: ключ-перехода
+          schema:
+            type: string
+      responses:
+        '200':
+          "description": User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AcceptUser"
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /forgot-password:
+    post:
+      summary: Метод отправляет пин-код на почту пользователя, для идентификации.
+      description: Метод предназначен для отправки специального кода для подтверждения принадлежности пользователя и текущего аккаунта
+      operationId: forgotPassword
+      tags:
+        - Reset Password
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/ForgotPassword"
+      responses:
+        '200':
+          "description": Подтверждение успешной отправки
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForgotPassword"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /send-pincode:
+    post:
+      summary: Метод отправляет введенный пин-код пользователем на сервер.
+      description: Метод предназначен для подтверждения личности данного пользователя и сопровождения на финальный этап сброса пароля
+      operationId: sendPincode
+      tags:
+        - Reset Password
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/SendPincode"
+      responses:
+        '200':
+          "description": Подтверждение успешной отправки
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendPincode"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /reset-password:
+    post:
+      summary: Метод отправляет пароль и пароль-подтверждение на сервер.
+      description: Метод предназначен для перезаписи старого пароля на новый.
+      operationId: resetPassword
+      tags:
+        - Reset Password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPassword"
+      responses:
+        '200':
+          description: Подтверждение смены пароля
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResetPassword"
+        '400':
+          description: Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /organizations:
+    get:
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которое необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
+      summary: Метод получения организаций
+      description: Метод предназначен для получения списка всех организаций, сохраненных в БД.
+      operationId: getOrganizations
+      tags:
+        - Organizations
+      responses:
+        '200':
+          "description": Список организаций
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organizations"
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Метод добавления организации
+      description: Метод предназначен для сохранения в БД данных по новой организации.
+      operationId: createOrganization
+      tags:
+        - Organizations
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        '200':
+          "description": Подтверждение успешного сохранения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /organizations/{orgId}:
+    get:
+      summary: Метод получения организации по идентификатору
+      operationId: getOrganizationById
+      tags:
+        - Organizations
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+      responses:
+        '200':
+          "description": Организация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Метод обновления организации
+      description: Метод предназначен для обновления в БД данных по имеющейся организации.
+      operationId: updateOrganization
+      tags:
+        - Organizations
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        '200':
+          "description": Подтверждение успешного обновления
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+    delete:
+      summary: Метод удаления организации по идентификатору
+      operationId: deleteOrganizationById
+      tags:
+        - Organizations
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+      responses:
+        '200':
+          "description": Успешное удаление
+          content:
+            'application/json': {}
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /organizations/{orgId}/invite/{roleId}:
+    post:
+      summary: Метод приглашения людей в организацию
+      description: Метод предназначен для добавления в БД данных нового пользователя, который был приглашен
+      operationId: addUserToOrganization
+      tags:
+        - Organizations
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: roleId
+          in: path
+          required: true
+          description: Идентификатор роли
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        '200':
+          "description": Подтверждение успешного обновления
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /organizations/{orgId}/projects:
+    get:
+
+      summary: Метод получения проектов по идентификатору организации
+      operationId: getProjectsById
+      tags:
+        - Projects
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которое необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
+      responses:
+        '200':
+          description: Проект
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Projects"
+        default:
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Метод добавления проекта в данную организацию
+      description: Метод предназначен для сохранения в БД данных по новому проекту в определенной организации.
+      operationId: createProject
+      tags:
+        - Projects
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/Project"
+      responses:
+        '200':
+          "description": Подтверждение успешного сохранения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /organizations/{orgId}/projects/{projectId}:
+    get:
+      summary: Метод получения одного проекта в данной организации
+      description: Метод предназначен для получения данных из БД по определенному проекту в определенной организации.
+      operationId: getOneProjectByOrgId
+      tags:
+        - Projects
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Проект
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Projects"
+        default:
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Метод обновления проекта данной организации
+      description: Метод предназначен для обновления в БД данных по имеющемуся проекту в данной организации.
+      operationId: updateProject
+      tags:
+        - Projects
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/Project"
+      responses:
+        '200':
+          "description": Подтверждение успешного обновления
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Метод удаления проекта по идентификатору в данной организации
+      operationId: deleteProjectById
+      tags:
+        - Projects
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: integer
+      responses:
+        '200':
+          "description": Успешное удаление
+          content:
+            'application/json': {}
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /organizations/{orgId}/projects/{projectId}/invite/{roleId}:
+    post:
+      summary: Метод приглашения пользователя из данной организации в данный проект с определенной ролью
+      operationId: inviteUserOfThisOrganization
+      tags:
+        - Projects
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: integer
+        - name: roleId
+          in: path
+          required: true
+          description: Идентификатор роли
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Подтверждение успешной отправки приглашения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /organizations/{orgId}/users:
+    get:
+      summary: Метод получения списка пользователей в данной организации
+      description: Метод предназначен для получения данных из БД по определенному проекту в определенной организации.
+      operationId: getUsersByOrganization
+      tags:
+        - Users
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которое необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
+      responses:
+        '200':
+          description: Пользователи
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        default:
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /organizations/{orgId}/users/{userId}:
+    get:
+      summary: Метод получения одного пользователя в данной организации
+      description: Метод предназначен для получения данных о пользователе в данной организациии
+      operationId: getUserByOrganization
+      tags:
+        - Users
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Пользователи
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Метод удаления одного пользователя из данной организации
+      description: Метод предназначен для удаления связи данного пользователя в данной организации
+      operationId: deleteUserFromOrganization
+      tags:
+        - Users
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Пользователи
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: Любая неожиданная ситуация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    UpdateColumn:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: "Новое название для колонки"
+    Success:
+      type: object
+      required:
+        - message
+        - status
+      properties:
+        message:
+          type: string
+          example: "Success"
+        status:
+          type: integer
+          example: 200
+    Desk:
+      type: object
+      required:
+        - id
+        - name
+        - project_id
+        - desk_columns
+      properties:
+        id:
+          type: string
+          example: "1"
+        name:
+          type: string
+          example: "Шбалон доски №1"
+        project_id:
+          type: string
+          example: "2"
+        desk_columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeskColumn"
+    DeskColumn:
+      type: object
+      required:
+        - desk_id
+        - status
+        - tasks
+      properties:
+        desk_id:
+          type: string
+          example: "2"
+        status:
+          type: string
+          example: "Колонка №1"
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+    Task:
+      type: object
+      required:
+        - title
+        - description
+        - img_src
+        - elapsed_time
+        - desk_column_id
+      properties:
+        title:
+          type: string
+          example: "Название задачи №1"
+        description:
+          type: string
+          example: "Описание задачи №1"
+        img_src:
+          type: string
+          example: "/images/tasks/task_1.jpg"
+        elapsed_time:
+          type: integer
+          example: 12
+        desk_column_id:
+          type: string
+          example: "3"
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+    User:
+      type: object
+      required:
+        - name
+        - email
+        - id
+      properties:
+        name:
+          type: string
+          example: "User"
+        email:
+          type: string
+          example: "example_test@mail.com"
+        id:
+          type: string
+          example: "1"
+    AcceptUser:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          example: "3|lKOdkjkfsdlkfsdkjfsogifodig324fsd"
+    Project:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          example: Проект Немезида
+        description:
+          type: string
+          example: Очень жесткий и крутой челик
+    Projects:
+      type: array
+      items:
+        $ref: "#/components/schemas/Project"
+
+    ResetPassword:
+      type: object
+      required:
+        - newPassword
+        - confirmPassword
+      properties:
+        newPassword:
+          type: string
+          example: "klimushkin1988"
+        confirmPassword:
+          type: string
+          example: "klimushkin1988"
+    SendPincode:
+      type: object
+      required:
+        - email
+        - pincode
+      properties:
+        email:
+          type: string
+          example: muhammed1942ali@gmail.com
+        pincode:
+          type: string
+          example: 13bbgh
+    ForgotPassword:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          example: muhammed1942ali@gmail.com
+    LoginUser:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: muhammed1942ali@gmail.com
+        password:
+          type: string
+          example: klimushkin1942
+    CreateUser:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: Артемий
+        email:
+          type: string
+          example: muhammed1942ali@gmail.com
+        password:
+          type: string
+          example: klimushkin1942
+    Organization:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        org_id:
+          type: string
+          example: 42abcd2b-8b9c-4af9-88f7-0bc180cf74b4
+        name:
+          description: Название организации
+          type: string
+          example: Train
+        description:
+          description: Описание (деятельности) организации
+          type: string
+    Organizations:
+      type: array
+      items:
+        $ref: "#/components/schemas/Organization"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

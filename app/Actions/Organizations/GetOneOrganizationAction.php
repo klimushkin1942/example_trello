@@ -2,15 +2,13 @@
 
 namespace App\Actions\Organizations;
 
+use App\Models\Organization;
 use App\Models\User;
 
 class GetOneOrganizationAction
 {
-    public function handle($userId, $id)
+    public function handle(User $user, Organization $org)
     {
-        return User::find($userId)
-            ->organizations()
-            ->where('organization_id', $id)
-            ->get();
+        return $user->organizations()->where('organization_id', $org->id)->first();
     }
 }

@@ -7,11 +7,8 @@ use App\Models\User;
 
 class DeleteOrganizationAction
 {
-    public function handle($userId, $id)
+    public function handle(User $user, Organization $org)
     {
-        return User::find($userId)
-            ->organizations()
-            ->where('organization_id', $id)
-            ->delete();
+        return $user->organizations()->where('organization_id', $org->id)->delete();
     }
 }

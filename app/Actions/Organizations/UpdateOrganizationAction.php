@@ -8,15 +8,8 @@ use App\Models\User;
 
 class UpdateOrganizationAction
 {
-    public function handle($userId, $id, $data)
+    public function handle(User $user, Organization $org, $data)
     {
-//        return Organization::where('id', $id)->update([
-//            'name' => $data['name'],
-//            'description' => $data['description'],
-//        ]);
-        return User::find($userId)
-            ->organizations()
-            ->where('organization_id', $id)
-            ->update($data);
+        return $user->organizations()->where('organization_id', $org->id)->update($data);
     }
 }

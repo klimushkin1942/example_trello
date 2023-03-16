@@ -19,4 +19,14 @@ class Organization extends Model
     {
         return $this->belongsToMany(User::class, 'users_organizations');
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'projects');
+    }
+
+    public function usersRolesOrganizations()
+    {
+        return $this->belongsToMany(UsersRolesOrganizations::class);
+    }
 }

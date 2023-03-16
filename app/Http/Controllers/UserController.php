@@ -2,39 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Organizations\CreateOrganizationAction;
-use App\Actions\Organizations\DeleteOrganizationAction;
-use App\Actions\Organizations\GetAllOrganizationAction;
-use App\Actions\Organizations\GetOneOrganizationAction;
-use App\Actions\Organizations\UpdateOrganizationAction;
-use App\Http\Requests\Organization\OrganizationStoreRequest;
-use App\Http\Requests\Organization\OrganizationUpdateRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Actions\Organizations\DeleteUserFromOrganization;
+use App\Actions\Users\CreateUserAction;
+use App\Actions\Users\GetAllUserAction;
+use App\Actions\Users\GetOneUserAction;
+use App\Actions\Users\UpdateUserAction;
+use App\Http\Requests\User\GetAllUserRequest;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\Organization;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function index(GetAllOrganizationAction $action)
+    public function index(GetAllUserAction $action, Organization $org, GetAllUserRequest $request)
     {
-        return $action->handle(Auth::id());
+        $this->authorize('can-get-all-users', [User::class, $org]);
+        return $action->handle($org, $request->validated());
     }
 
-    public function store(OrganizationStoreRequest $request, CreateOrganizationAction $action)
+    public function store(UserStoreRequest $request, CreateUserAction $action)
     {
-        return $action->handle(Auth::id(), $request->all());
+        return $action->handle($request->validated());
     }
 
-    public function show($orgId, GetOneOrganizationAction $action)
+    public function show(GetOneUserAction $action, Organization $org, User $user)
     {
-        return $action->handle(Auth::id(), $orgId);
+        $this->authorize('can-read-user', [User::class, $org]);
+        return $action->handle($org, $user);
     }
 
-    public function update(OrganizationUpdateRequest $request, $id, UpdateOrganizationAction $action)
+    public function update(UserUpdateRequest $request, User $user, UpdateUserAction $action)
     {
-        return $action->handle(Auth::id(), $id, $request->all());
+        return $action->handle($user, $request->validated());
     }
 
-    public function destroy($orgId, DeleteOrganizationAction $action)
+    public function destroy(DeleteUserFromOrganization $action, Organization $org, User $user)
     {
-        return $action->handle(Auth::id(), $orgId);
+        $this->authorize('can-delete-user', [User::class, $org]);
+        return $action->handle($org, $user);
     }
 }

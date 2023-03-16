@@ -2,32 +2,23 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
 use Illuminate\Support\Str;
 
 class AuthTest extends TestCase
 {
-    public function test_register_user()
+    public function testRegisterUser()
     {
-//        $response = $this->post('/api/register', [
-//            'name' => Str::random(20),
-//            'email' => Str::random(10) . "@mail.com",
-//            'password' => Str::random(20)
-//        ]);
-
         $response = $this->post('/api/register', [
-            'name' => "Артемий",
-            'email' => "muhammed1942ali@gmail.com",
+            'name' => Str::random(10),
+            'email' => Str::random(10) . '@gmail.com',
             'password' => "klimushkin1942"
         ]);
 
         $response->assertCreated();
     }
 
-    public function test_login_user()
+    public function testLoginUser()
     {
         $response = $this->post('/api/login', [
             'email' => 'muhammed1942ali@gmail.com',
@@ -37,7 +28,7 @@ class AuthTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_logout_user()
+    public function testLogoutUser()
     {
         $response = $this->post('/api/logout',[]);
         $response->assertOk();

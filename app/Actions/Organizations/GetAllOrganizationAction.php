@@ -7,12 +7,12 @@ use App\Models\User;
 
 class GetAllOrganizationAction
 {
-    public function handle($userId)
+    public function handle(User $user, $params)
     {
-        return User::find($userId)
-            ->organizations()
-            ->orderBy('created_at', 'asc')
-            ->limit(5)
+        return $user->organizations()
+            ->orderBy('id')
+            ->limit($params['limit'])
+            ->offset($params['offset'])
             ->get();
     }
 }

@@ -3,67 +3,78 @@
 namespace Tests\Feature;
 
 use App\Models\Organization;
+use App\Models\UsersOrganizations;
+use App\Models\UsersRolesOrganizations;
 use http\Env\Response;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 use App\Models\User;
 
 class OrganizationTest extends TestCase
 {
     /**
-     * A basic feature test example.
-     *
-     * @return void
+     * @return \Illuminate\Testing\TestResponse
      */
-
-    public function test_post_create_organization()
+    public function testPostCreateOrganization()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
+
         $response = $this->actingAs($user)->post('/api/organizations', [
-            'name' => 'Привет, что-то там...',
+            'name' => 'Созданная',
             'description' => 'Как там и что',
-            'user_id' => '1'
         ]);
-        return $response->assertCreated();
+
+        $this->assertDatabaseHas('organizations', [
+            'name' => 'Созданная',
+            'description' => 'Как там и что',
+        ]);
+
+        return $response->assertStatus(201);
     }
 
-    public function test_get_all_organizations()
+    public function testGetAllOrganizations()
     {
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
-        $response = $this->actingAs($user)->get('/api/organizations', []);
-        $response->assertOk();
+        $response = $this->actingAs($user)->json('GET', '/api/organizations', ['limit' => 5, 'offset' => 0]);
+        return $response->assertStatus(200);
     }
 
-    public function test_get_one_organization()
+    public function testGetOneOrganization()
     {
-        $orgId = '1';
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
-        $response = $this->actingAs($user)->get('/api/organizations/' . $orgId, []);
+        $organization = UsersOrganizations::where('user_id', $user->id)->first();
 
-        $response->assertOk();
+        $response = $this->actingAs($user)->get('/api/organizations/' . $organization->organization_id);
+
+        $this->assertDatabaseHas('organizations',['id' => $organization->id]);
+        return $response->assertStatus(200);
     }
 
-
-    public function test_put_update_organization()
+    public function testPutUpdateOrganization()
     {
-        $orgId = '2';
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
-
-        $response = $this->actingAs($user)->put('/api/organizations/' . $orgId, [
+        $organization = UsersOrganizations::where('user_id', $user->id)->first();
+        $response = $this->actingAs($user)->put('/api/organizations/' . $organization->organization_id, [
             'name' => 'Саламуля, ребята',
             'description' => 'Биба и Боба',
         ]);
 
-        return $response->assertOk();
+        $this->assertDatabaseHas('organizations', [
+            'id' => $organization->organization_id,
+            'name' => 'Саламуля, ребята',
+            'description' => 'Биба и Боба'
+        ]);
+
+        return $response->assertStatus(200);
     }
 
-    public function test_delete_organization()
+    public function testDeleteOrganization()
     {
-        $orgId = '1';
+        $orgId = UsersRolesOrganizations::first()->organization_id;
         $user = User::where('email', 'muhammed1942ali@gmail.com')->first();
-        $response = $this->actingAs($user)->delete('/api/organizations/' . $orgId, []);
+        $response = $this->actingAs($user)->delete('/api/organizations/' . $orgId);
 
-        return $response->assertOk();
+        $response->assertStatus(200);
+        return $this->assertDatabaseMissing('organizations', ['id' => $orgId]);
     }
 }
