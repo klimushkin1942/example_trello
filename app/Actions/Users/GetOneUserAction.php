@@ -5,10 +5,8 @@ use App\Models\User;
 use App\Models\Organization;
 class GetOneUserAction
 {
-    public function handle($orgId, $userId)
+    public function handle(Organization $org, User $user)
     {
-        return Organization::findOrFail($orgId)
-            ->users()
-            ->findOrFail($userId);
+        return $org->users()->findOrFail($user->id);
     }
 }

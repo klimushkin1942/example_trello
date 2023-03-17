@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\RoleTypes;
+use App\Models\Organization;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
@@ -24,10 +25,10 @@ class UserContentPolicy
     {
 
     }
-    public function canGetAllUsers(User $user, $orgId)
+    public function canGetAllUsers(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization)) {
@@ -36,10 +37,10 @@ class UserContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canReadUser(User $user, $orgId)
+    public function canReadUser(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization)) {
@@ -48,10 +49,10 @@ class UserContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canDeleteUser(User $user, $orgId)
+    public function canDeleteUser(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization)) {

@@ -6,8 +6,8 @@ use App\Models\Project;
 
 class GetOneProjectAction
 {
-    public function handle($projectId)
+    public function handle(Project $project)
     {
-        return Project::findOrFail($projectId);
+        return Project::findOrFail($project->id);
     }
 }

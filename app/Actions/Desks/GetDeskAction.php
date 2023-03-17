@@ -6,9 +6,8 @@ use App\Models\Desk;
 
 class GetDeskAction
 {
-    public function handle($deskId)
+    public function handle(Desk $desk)
     {
-        $desk = Desk::findOrFail($deskId);
-        return Desk::with('deskColumns.tasks')->find($desk->id);
+        return $desk->with('deskColumns.tasks')->get();
     }
 }

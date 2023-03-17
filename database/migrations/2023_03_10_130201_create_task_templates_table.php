@@ -24,7 +24,6 @@ class CreateTaskTemplatesTable extends Migration
                 ->constrained('desk_columns_templates')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-
             $table->timestamps();
         });
     }

@@ -11,9 +11,7 @@ class CreateOrganizationAction
 
     public function handle(User $user, $params)
     {
-        $organization = User::findOrFail($user->id)
-            ->organizations()
-            ->create(
+        $organization = $user->organizations()->create(
                 [
                     'name' => $params['name'],
                     'description' => $params['description']

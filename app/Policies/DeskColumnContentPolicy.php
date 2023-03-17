@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Models\Organization;
+use App\Models\Project;
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
 use App\Models\UsersRolesProjects;
@@ -24,15 +26,15 @@ class DeskColumnContentPolicy
         //
     }
 
-    public function canCreateColumn(User $user, $orgId, $projectId)
+    public function canCreateColumn(User $user, Organization $org, Project $project)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
-            ->where('project_id', $projectId)
+            ->where('organization_id', $org->id)
+            ->where('project_id', $project->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)
@@ -44,15 +46,15 @@ class DeskColumnContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canDeleteColumn(User $user, $orgId, $projectId)
+    public function canDeleteColumn(User $user, Organization $org, Project $project)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
-            ->where('project_id', $projectId)
+            ->where('organization_id', $org->id)
+            ->where('project_id', $project->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)
@@ -64,15 +66,15 @@ class DeskColumnContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canUpdateColumn(User $user, $orgId, $projectId)
+    public function canUpdateColumn(User $user, Organization $org, Project $project)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
-            ->where('project_id', $projectId)
+            ->where('organization_id', $org->id)
+            ->where('project_id', $project->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)

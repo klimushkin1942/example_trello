@@ -7,13 +7,11 @@ use App\Models\DeskColumn;
 
 class CreateDeskColumnAction
 {
-    public function handle($deskId)
+    public function handle(Desk $desk)
     {
-        $desk = Desk::findOrFail($deskId);
-
         return DeskColumn::with('desks')->where('desk_id', $desk->id)->create([
             'desk_id' => $desk->id,
-            'status' => 'Супер статус' . $deskId
+            'status' => 'Супер статус' . $desk->id
         ]);
     }
 }

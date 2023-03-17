@@ -7,11 +7,10 @@ use App\Models\DeskColumn;
 
 class UpdateDeskColumnAction
 {
-    public function handle($deskId, $deskColumnId, $credentials)
+    public function handle(DeskColumn $column, $params)
     {
-        Desk::findOrFail($deskId);
-        return DeskColumn::with('desks')->findOrFail($deskColumnId)->update([
-            'status' => $credentials['status']
+        return DeskColumn::with('desks')->findOrFail($column->id)->update([
+            'status' => $params['status']
         ]);
     }
 }

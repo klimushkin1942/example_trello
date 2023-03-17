@@ -36,45 +36,44 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('/organizations')->group(function () {
         // organizations
         Route::get('/',[OrganizationController::class, 'index']);
-        Route::get('/{orgId}', [OrganizationController::class, 'show']);
+        Route::get('/{org}', [OrganizationController::class, 'show']);
         Route::post('/', [OrganizationController::class, 'store']);
-        Route::put('/{orgId}', [OrganizationController::class, 'update']);
-        Route::delete('/{orgId}', [OrganizationController::class, 'destroy']);
+        Route::put('/{org}', [OrganizationController::class, 'update']);
+        Route::delete('/{org}', [OrganizationController::class, 'destroy']);
 
         // users
-        Route::get('/{orgId}/users', [UserController::class, 'index']);
-        Route::get('/{orgId}/users/{userId}', [UserController::class, 'show']);
+        Route::get('/{org}/users', [UserController::class, 'index']);
+        Route::get('/{org}/users/{user}', [UserController::class, 'show']);
         Route::post('/users', [UserController::class, 'store']);
-        Route::put('/users/{userId}', [UserController::class, 'update']);
-        Route::delete('/{orgId}/users/{userId}', [UserController::class, 'destroy']);
+        Route::put('/users/{user}', [UserController::class, 'update']);
+        Route::delete('/{org}/users/{user}', [UserController::class, 'destroy']);
 
         // projects
-        Route::get('/{orgId}/projects', [ProjectsController::class, 'index']);
-        Route::get('/{orgId}/projects/{projectId}', [ProjectsController::class, 'show']);
-        Route::post('/{orgId}/projects', [ProjectsController::class, 'store']);
-        Route::put('/{orgId}/projects/{projectId}', [ProjectsController::class, 'update']);
-        Route::delete('/{orgId}/projects/{projectId}', [ProjectsController::class, 'destroy']);
+        Route::get('/{org}/projects', [ProjectsController::class, 'index']);
+        Route::get('/{org}/projects/{project}', [ProjectsController::class, 'show']);
+        Route::post('/{org}/projects', [ProjectsController::class, 'store']);
+        Route::put('/{org}/projects/{project}', [ProjectsController::class, 'update']);
+        Route::delete('/{org}/projects/{project}', [ProjectsController::class, 'destroy']);
 
         // invite users to organization
-        Route::post('/{orgId}/invite/{roleId}', [InviteController::class, 'inviteToOrganization']);
+        Route::post('/{org}/invite/{roleId}', [InviteController::class, 'inviteToOrganization']);
 
         // invite users, which exists
-        Route::post('/{orgId}/projects/{projectId}/invite/{proRoleId}', [InviteController::class, 'inviteToProjectExitsUser']);
+        Route::post('/{org}/projects/{project}/invite/{proRoleId}', [InviteController::class, 'inviteToProjectExitsUser']);
 
         // desks
-        Route::get('/{orgId}/projects/{projectId}/desks/{deskId}', [DeskController::class, 'show']);
-        Route::post('/{orgId}/projects/{projectId}/desks', [DeskController::class, 'store']);
-        Route::delete('/{orgId}/projects/{projectId}/desks/{deskId}', [DeskController::class, 'destroy']);
+        Route::get('/{org}/projects/{project}/desks/{desk}', [DeskController::class, 'show']);
+        Route::post('/{org}/projects/{project}/desks', [DeskController::class, 'store']);
+        Route::delete('/{org}/projects/{project}/desks/{desk}', [DeskController::class, 'destroy']);
 
         // desks column
-        Route::post('/{orgId}/projects/{projectId}/desks/{deskId}/columns', [DeskColumnController::class, 'store']);
-        Route::put('/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}', [DeskColumnController::class, 'update']);
-        Route::delete('/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}', [DeskColumnController::class, 'destroy']);
+        Route::post('/{org}/projects/{project}/desks/{desk}/columns', [DeskColumnController::class, 'store']);
+        Route::put('/{org}/projects/{project}/desks/{desk}/columns/{column}', [DeskColumnController::class, 'update']);
+        Route::delete('/{org}/projects/{project}/desks/{desk}/columns/{column}', [DeskColumnController::class, 'destroy']);
+
+        // tasks
+        Route::post('/{org}/projects/{project}/desks/{desk}/columns/{column}/tasks', [TaskController::class, 'store']);
+        Route::delete('/{org}/projects/{project}/desks/{desk}/columns/{column}/tasks/{task}', [TaskController::class, 'destroy']);
+        Route::put('/{org}/projects/{project}/desks/{desk}/columns/{column}/tasks/{task}', [TaskController::class, 'update']);
     });
-
-
-    // tasks
-    Route::post('/organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}/tasks', [TaskController::class, 'store']);
-    Route::delete('/organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}/tasks/{taskId}', [TaskController::class, 'destroy']);
-    Route::put('/organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}/tasks/{tasksId}', [TaskController::class, 'update']);
 });

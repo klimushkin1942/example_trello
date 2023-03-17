@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Models\Organization;
+use App\Models\Project;
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
 use App\Models\UsersRolesProjects;
@@ -23,14 +25,14 @@ class DeskContentPolicy
     {
         //
     }
-    public function canCreateDesk(User $user, $orgId)
+    public function canCreateDesk(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization) || $this->isAdminProject($usersRolesProject)) {
@@ -40,15 +42,15 @@ class DeskContentPolicy
         }
         return Response::deny('Нет доступа');
     }
-    public function canReadDesk(User $user, $orgId, $projectId)
+    public function canReadDesk(User $user, Organization $org, Project $project)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
-            ->where('project_id', $projectId)
+            ->where('organization_id', $org->id)
+            ->where('project_id', $project->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)
@@ -59,15 +61,15 @@ class DeskContentPolicy
         }
         return Response::deny('Нет доступа');
     }
-    public function canDeleteDesk(User $user, $orgId, $projectId)
+    public function canDeleteDesk(User $user, Organization $org, Project $project)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
-            ->where('project_id', $projectId)
+            ->where('organization_id', $org->id)
+            ->where('project_id', $project->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization) && $this->isCurrentUser($usersRolesOrganization, $usersRolesProject)

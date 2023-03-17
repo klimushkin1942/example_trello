@@ -6,8 +6,8 @@ use App\Models\Desk;
 
 class DeleteDeskAction
 {
-    public function handle($deskId)
+    public function handle(Desk $desk)
     {
-        return Desk::destroy($deskId);
+        return $desk->delete();
     }
 }

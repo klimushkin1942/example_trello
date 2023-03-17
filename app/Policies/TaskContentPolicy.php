@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleTypes;
 use App\Models\Organization;
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
@@ -11,7 +10,7 @@ use App\Policies\TraitHelper\RolesAuthorization;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class OrganizationContentPolicy
+class TaskContentPolicy
 {
     use HandlesAuthorization;
     use RolesAuthorization;
@@ -25,25 +24,18 @@ class OrganizationContentPolicy
     {
         //
     }
-    public function canUpdateOrganization(User $user, Organization $org)
+
+    public function canCreateTask(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
             ->where('organization_id', $org->id)
             ->first();
 
-        if ($this->isAdminOrganization($usersRolesOrganization)) {
-            return Response::allow('Admin');
-        }
-        return Response::deny('Нет доступа');
-    }
-
-    public function canReadOrganization(User $user, Organization $org)
-    {
-        $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
             ->where('organization_id', $org->id)
             ->first();
 
-        if ($this->isAdminOrganization($usersRolesOrganization)) {
+        if ($this->isAdminOrganization($usersRolesOrganization) || $this->isAdminProject($usersRolesProject)) {
             return Response::allow('Admin');
         } elseif ($this->isUserOrganization($usersRolesOrganization)) {
             return Response::allow('User');
@@ -51,14 +43,38 @@ class OrganizationContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canDeleteOrganization(User $user, Organization $org)
+    public function canUpdateTask(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
             ->where('organization_id', $org->id)
             ->first();
 
-        if ($this->isAdminOrganization($usersRolesOrganization)) {
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
+            ->where('organization_id', $org->id)
+            ->first();
+
+        if ($this->isAdminOrganization($usersRolesOrganization) || $this->isAdminProject($usersRolesProject)) {
             return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization)) {
+            return Response::allow('User');
+        }
+        return Response::deny('Нет доступа');
+    }
+
+    public function canDeleteTask(User $user, Organization $org)
+    {
+        $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
+            ->where('organization_id', $org->id)
+            ->first();
+
+        $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
+            ->where('organization_id', $org->id)
+            ->first();
+
+        if ($this->isAdminOrganization($usersRolesOrganization) || $this->isAdminProject($usersRolesProject)) {
+            return Response::allow('Admin');
+        } elseif ($this->isUserOrganization($usersRolesOrganization)) {
+            return Response::allow('User');
         }
         return Response::deny('Нет доступа');
     }

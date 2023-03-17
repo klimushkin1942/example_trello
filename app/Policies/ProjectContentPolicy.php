@@ -3,6 +3,8 @@
 namespace App\Policies;
 
 use App\Enums\RoleTypes;
+use App\Models\Organization;
+use App\Models\Project;
 use App\Models\User;
 use App\Models\UsersRolesOrganizations;
 use App\Models\UsersRolesProjects;
@@ -22,10 +24,10 @@ class ProjectContentPolicy
     {
         //
     }
-    public function canCreateProject(User $user, $orgId)
+    public function canCreateProject(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization)) {
@@ -34,10 +36,10 @@ class ProjectContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canDeleteProject(User $user, $orgId)
+    public function canDeleteProject(User $user, Organization $org)
     {
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         if ($this->isAdminProject($usersRolesProject)) {
@@ -46,15 +48,15 @@ class ProjectContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canReadProject(User $user, $orgId, $projectId)
+    public function canReadProject(User $user, Organization $org, Project $project)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
-            ->where('project_id', $projectId)
+            ->where('organization_id', $org->id)
+            ->where('project_id', $project->id)
             ->first();
 
         if ($this->isCurrentUser($usersRolesOrganization, $usersRolesProject) && $this->isAdminProject($usersRolesProject)
@@ -66,10 +68,10 @@ class ProjectContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canGetAllProject(User $user, $orgId)
+    public function canGetAllProject(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization)) {
@@ -78,14 +80,14 @@ class ProjectContentPolicy
         return Response::deny('Нет доступа');
     }
 
-    public function canUpdateProject(User $user, $orgId)
+    public function canUpdateProject(User $user, Organization $org)
     {
         $usersRolesOrganization = UsersRolesOrganizations::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         $usersRolesProject = UsersRolesProjects::where('user_id', $user->id)
-            ->where('organization_id', $orgId)
+            ->where('organization_id', $org->id)
             ->first();
 
         if ($this->isAdminOrganization($usersRolesOrganization) || $this->isAdminProject($usersRolesProject)) {

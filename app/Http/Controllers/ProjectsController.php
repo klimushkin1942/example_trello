@@ -15,33 +15,33 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Organization;
 class ProjectsController extends Controller
 {
-    public function index(GetAllProjectAction $action, $orgId, GetAllProjectRequest $request)
+    public function index(GetAllProjectAction $action, Organization $org, GetAllProjectRequest $request)
     {
-        $this->authorize('can-get-all-project', [Project::class, $orgId]);
-        return $action->handle(Organization::findOrFail($orgId), $request->validated());
+        $this->authorize('can-get-all-project', [Project::class, $org]);
+        return $action->handle($org, $request->validated());
     }
 
-    public function store(ProjectStoreRequest $request, $orgId, CreateProjectAction $action)
+    public function store(ProjectStoreRequest $request, Organization $org, CreateProjectAction $action)
     {
-        $this->authorize('can-create-project', [Project::class, $orgId]);
-        return $action->handle($request->validated(), Organization::findOrFail($orgId), Auth::user());
+        $this->authorize('can-create-project', [Project::class, $org]);
+        return $action->handle($request->validated(), $org, Auth::user());
     }
 
-    public function show(GetOneProjectAction $action, $orgId, $projectId)
+    public function show(GetOneProjectAction $action, Organization $org, Project $project)
     {
-        $this->authorize('can-read-project', [Project::class, $orgId, $projectId]);
-        return $action->handle($projectId);
+        $this->authorize('can-read-project', [Project::class, $org, $project]);
+        return $action->handle($project);
     }
 
-    public function update(ProjectUpdateRequest $request, UpdateProjectAction $action, $orgId, $projectId)
+    public function update(ProjectUpdateRequest $request, UpdateProjectAction $action, Organization $org, Project $project)
     {
-        $this->authorize('can-update-project', [Project::class, $orgId]);
-        return $action->handle($request->validated(), Project::findOrFail($projectId));
+        $this->authorize('can-update-project', [Project::class, $org]);
+        return $action->handle($request->validated(), $project);
     }
 
-    public function destroy(DeleteProjectAction $action, $orgId, $projectId)
+    public function destroy(DeleteProjectAction $action, Organization $org, Project $project)
     {
-        $this->authorize('can-delete-project', [Project::class, $orgId]);
-        return $action->handle(Organization::findOrFail($orgId), Project::where('organization_id', $orgId)->findOrFail($projectId));
+        $this->authorize('can-delete-project', [Project::class, $org]);
+        return $action->handle($project);
     }
 }

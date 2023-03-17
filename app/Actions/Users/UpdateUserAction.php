@@ -4,9 +4,8 @@ namespace App\Actions\Users;
 use App\Models\User;
 class UpdateUserAction
 {
-    public function handle(int $userId, $data)
+    public function handle(User $user, $params)
     {
-        $user = User::findOrFail($userId);
-        return $user->update($data);
+        return $user->update($params);
     }
 }

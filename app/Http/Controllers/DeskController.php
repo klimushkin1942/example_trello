@@ -6,35 +6,26 @@ use App\Actions\Desks\CreateDeskAction;
 use App\Actions\Desks\DeleteDeskAction;
 use App\Actions\Desks\GetDeskAction;
 use App\Models\Desk;
+use App\Models\Organization;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class DeskController extends Controller
 {
-    public function index()
+    public function store(CreateDeskAction $action, Organization $org, Project $project, Request $request)
     {
-        return 1;
+        $this->authorize('can-create-desk', [Desk::class, $org, $project]);
+        return $action->handle($project, $request->desk_template_id);
     }
 
-    public function store(CreateDeskAction $action, $orgId, $projectId, Request $request)
+    public function show(GetDeskAction $action, Organization $org, Project $project, Desk $desk)
     {
-        $this->authorize('can-create-desk', [Desk::class, $orgId, $projectId]);
-        return $action->handle($projectId, $request->desk_template_id);
+        $this->authorize('can-read-desk', [Desk::class, $org, $project]);
+        return $action->handle($desk);
     }
-
-    public function show(GetDeskAction $action, $orgId, $projectId, $deskId)
+    public function destroy(DeleteDeskAction $action, Organization $org, Project $project, Desk $desk)
     {
-        $this->authorize('can-read-desk', [Desk::class, $orgId, $projectId]);
-        return $action->handle($deskId);
-    }
-
-    public function update()
-    {
-        return 4;
-    }
-
-    public function destroy(DeleteDeskAction $action, $orgId, $projectId, $deskId)
-    {
-        $this->authorize('can-delete-desk', [Desk::class, $orgId, $projectId]);
-        return $action->handle($deskId);
+        $this->authorize('can-delete-desk', [Desk::class, $org, $project]);
+        return $action->handle($desk);
     }
 }

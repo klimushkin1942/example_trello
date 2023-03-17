@@ -12,10 +12,9 @@ use App\Models\TaskTemplate;
 
 class CreateDeskAction
 {
-    public function handle($projectId, $deskId)
+    public function handle(Project $project, $deskId)
     {
         $deskTemplate = DesksTemplates::findOrFail($deskId);
-        $project = Project::findOrFail($projectId);
         $newDesk = Desk::create([
             'name' => $deskTemplate->name,
             'project_id' => $project->id,
@@ -39,6 +38,5 @@ class CreateDeskAction
                 ]);
             }
         }
-
     }
 }

@@ -11,9 +11,8 @@ use App\Mail\Invites\MailInviteOrganization;
 use App\Models\UsersRolesOrganizations;
 class SendInviteOrganizationAction
 {
-    public function handle($credentials, $orgId, $roleId)
+    public function handle($credentials, Organization $org, $roleId)
     {
-        $organization = Organization::findOrFail($orgId);
         $token = Str::random(10);
 
         $user = User::create([
@@ -24,12 +23,12 @@ class SendInviteOrganizationAction
 
         UsersOrganizations::create([
             'user_id' => $user->id,
-            'organization_id' => $orgId
+            'organization_id' => $org->id
         ]);
 
         UsersRolesOrganizations::create([
             'user_id' => $user->id,
-            'organization_id' => $orgId,
+            'organization_id' => $org->id,
             'role_id' => $roleId
         ]);
 
@@ -37,13 +36,13 @@ class SendInviteOrganizationAction
             'subject' => 'Приглашение',
             'name' => 'Приглашение',
             'url'  => config("app.url") . "/api/accept/" . $token,
-            'body' => 'Организация ' . "\"" . $organization->name . "\"" . "ждёт Вас",
+            'body' => 'Организация ' . "\"" . $org->name . "\"" . "ждёт Вас",
         ];
 
         Invite::create([
             'email' => $credentials['email'],
             'token' => $token,
-            'organization_id' => $organization->id
+            'organization_id' => $org->id
         ]);
 
         return Mail::to($credentials['email'])->send(new MailInviteOrganization($dataForMail));

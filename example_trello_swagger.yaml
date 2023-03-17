@@ -240,6 +240,17 @@ paths:
 
   /organizations:
     get:
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которые необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
       summary: Метод получения организаций
       description: Метод предназначен для получения списка всех организаций, сохраненных в БД.
       operationId: getOrganizations
@@ -304,7 +315,7 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           "description": Организация
@@ -330,7 +341,7 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
       requestBody:
         required: true
         content:
@@ -351,7 +362,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  type: integer
 
     delete:
       summary: Метод удаления организации по идентификатору
@@ -364,7 +375,7 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           "description": Успешное удаление
@@ -389,13 +400,13 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: roleId
           in: path
           required: true
           description: Идентификатор роли
           schema:
-            type: string      
+            type: integer      
       requestBody:
         required: true
         content:
@@ -435,7 +446,17 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которые необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
       responses:
         '200':
           description: Проект
@@ -461,7 +482,7 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
       requestBody:
         required: true
         content:
@@ -482,7 +503,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  type: integer
         default:
           description: Любая неожиданная ошибка
           content:
@@ -503,13 +524,13 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Проект
@@ -535,13 +556,13 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
       requestBody:
         required: true
         content:
@@ -580,13 +601,13 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           "description": Успешное удаление
@@ -610,19 +631,19 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
         - name: roleId
           in: path
           required: true
           description: Идентификатор роли
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Подтверждение успешной отправки приглашения
@@ -644,7 +665,17 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Количество элементов, которые необходимо пропустить перед началом сбора результирующего набора
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Количество элементов для возврата
       responses:
         '200':
           description: Пользователи
@@ -672,13 +703,13 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: userId
           in: path
           required: true
           description: Идентификатор пользователя
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Пользователи
@@ -704,13 +735,13 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: userId
           in: path
           required: true
           description: Идентификатор пользователя
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Пользователи
@@ -736,13 +767,13 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Подтверждение успешной отправки приглашения
@@ -764,19 +795,19 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
         - name: deskId
           in: path
           required: true
           description: Идентификатор доски
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Пользователи
@@ -802,19 +833,19 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
         - name: deskId
           in: path
           required: true
           description: Идентификатор доски
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Доска
@@ -840,19 +871,19 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
         - name: deskId
           in: path
           required: true
           description: Идентификатор доски
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Подтверждение успешной отправки приглашения
@@ -873,25 +904,25 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
         - name: deskId
           in: path
           required: true
           description: Идентификатор доски
           schema:
-            type: string
+            type: integer
         - name: columnId
           in: path
           required: true
           description: Идентификатор колонки
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Доска
@@ -917,31 +948,185 @@ paths:
           required: true
           description: Идентификатор организации
           schema:
-            type: string
+            type: integer
         - name: projectId
           in: path
           required: true
           description: Идентификатор проекта
           schema:
-            type: string
+            type: integer
         - name: deskId
           in: path
           required: true
           description: Идентификатор доски
           schema:
-            type: string
+            type: integer
         - name: columnId
           in: path
           required: true
           description: Идентификатор колонки
           schema:
-            type: string
+            type: integer
       requestBody:
         required: true
         content:
           'application/json':
             schema:
               $ref: "#/components/schemas/UpdateColumn"
+      responses:
+        '200':
+          "description": Подтверждение успешного обновления
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        '400':
+          "description": Некорректные входные данные. Возвращает список атрибутов с ошибками
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Любая неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+  /organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}/tasks:
+    post:
+      summary: Метод добавления задачи к конкретной колонке внутри доски
+      operationId: addTaskByColumnId
+      tags:
+        - Tasks
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: integer
+        - name: deskId
+          in: path
+          required: true
+          description: Идентификатор доски
+          schema:
+            type: integer
+        - name: columnId
+          in: path
+          required: true
+          description: Идентификатор колонки
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Подтверждение успешной отправки приглашения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+  /organizations/{orgId}/projects/{projectId}/desks/{deskId}/columns/{columnId}/tasks/{taskId}:
+    delete:
+      summary: Метод удаления задачи из колонки из заданной колонки
+      description: Метод предназначен для удаления данных о конкретной задаче из БД.
+      operationId:  deleteTaskById
+      tags:
+        - Tasks
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: integer
+        - name: deskId
+          in: path
+          required: true
+          description: Идентификатор доски
+          schema:
+            type: integer
+        - name: columnId
+          in: path
+          required: true
+          description: Идентификатор колонки
+          schema:
+            type: integer
+        - name: taskId
+          in: path
+          required: true
+          description: Идентификатор задачи
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Доска
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        default:
+            description: Любая неожиданная ситуация
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+    put:
+      summary: Метод обновления задачи на конкретной колонке
+      description: Метод предназначен для обновления в БД данных по имеющейся задаче в данной колонке.
+      operationId: updateTaskById
+      tags:
+        - Tasks
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Идентификатор организации
+          schema:
+            type: integer
+        - name: projectId
+          in: path
+          required: true
+          description: Идентификатор проекта
+          schema:
+            type: integer
+        - name: deskId
+          in: path
+          required: true
+          description: Идентификатор доски
+          schema:
+            type: integer
+        - name: columnId
+          in: path
+          required: true
+          description: Идентификатор колонки
+          schema:
+            type: integer
+        - name: taskId
+          in: path
+          required: true
+          description: Идентификатор задачи
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/Task"
       responses:
         '200':
           "description": Подтверждение успешного обновления
