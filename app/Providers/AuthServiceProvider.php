@@ -5,15 +5,20 @@ namespace App\Providers;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\UserController;
+use App\Models\Desk;
+use App\Models\DeskColumn;
 use App\Models\Invite;
 use App\Models\Organization;
 use App\Models\Project;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\UsersOrganizations;
+use App\Policies\DeskColumnContentPolicy;
 use App\Policies\DeskContentPolicy;
 use App\Policies\InviteContentPolicy;
 use App\Policies\OrganizationContentPolicy;
 use App\Policies\ProjectContentPolicy;
+use App\Policies\TaskContentPolicy;
 use App\Policies\UserContentPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -31,7 +36,10 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserContentPolicy::class,
         Organization::class => OrganizationContentPolicy::class,
         Project::class => ProjectContentPolicy::class,
-        Invite::class => InviteContentPolicy::class
+        Invite::class => InviteContentPolicy::class,
+        Desk::class => DeskContentPolicy::class,
+        DeskColumn::class => DeskColumnContentPolicy::class,
+        Task::class => TaskContentPolicy::class,
     ];
 
     public function boot()
