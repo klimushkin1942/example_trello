@@ -43,13 +43,14 @@ class DeskColumnTest extends TestCase
             'desk_template_id' => $deskTemplate->id
         ]);
 
+
         $desk = Desk::where('project_id', $project->id)->first();
 
         $response = $this->actingAs($user)->post('/api/organizations/' . $organization->id . '/projects/' . $project->id . '/desks/' . $desk->id . '/columns', [
             'desk_id' => $desk->id,
             'status' => 'Супер статус' . $desk->id
         ]);
-
+//        dd($desk->id);
         $this->assertDatabaseHas('desk_columns', ['desk_id' => $desk->id]);
 
         $response->assertStatus(201);

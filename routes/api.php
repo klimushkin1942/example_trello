@@ -8,6 +8,9 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\DeskController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\DeskColumnController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,5 +61,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         // invite users, which exists
         Route::post('/{org}/projects/{project}/invite/{proRoleId}', [InviteController::class, 'inviteToProjectExistUser']);
+
+        // desks
+        Route::get('/{org}/projects/{project}/desks/{desk}', [DeskController::class, 'show']);
+        Route::post('/{org}/projects/{project}/desks', [DeskController::class, 'store']);
+        Route::delete('/{org}/projects/{project}/desks/{desk}', [DeskController::class, 'destroy']);
+
+        // desks column
+        Route::post('/{org}/projects/{project}/desks/{desk}/columns', [DeskColumnController::class, 'store']);
+        Route::put('/{org}/projects/{project}/desks/{desk}/columns/{column}', [DeskColumnController::class, 'update']);
+        Route::delete('/{org}/projects/{project}/desks/{desk}/columns/{column}', [DeskColumnController::class, 'destroy']);
+
+        // tasks
+        Route::post('/{org}/projects/{project}/desks/{desk}/columns/{column}/tasks', [TaskController::class, 'store']);
+        Route::delete('/{org}/projects/{project}/desks/{desk}/columns/{column}/tasks/{task}', [TaskController::class, 'destroy']);
+        Route::put('/{org}/projects/{project}/desks/{desk}/columns/{column}/tasks/{task}', [TaskController::class, 'update']);
     });
 });
