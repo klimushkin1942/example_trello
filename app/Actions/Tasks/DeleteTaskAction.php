@@ -2,10 +2,12 @@
 
 namespace App\Actions\Tasks;
 
+use App\Models\Task;
+
 class DeleteTaskAction
 {
-    public function handle()
+    public function handle(Task $task)
     {
-        return 'deleteTaskAction';
+        return $task->delete();
     }
 }

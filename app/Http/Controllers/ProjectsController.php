@@ -42,6 +42,6 @@ class ProjectsController extends Controller
     public function destroy(DeleteProjectAction $action, Organization $org, Project $project)
     {
         $this->authorize('can-delete-project', [Project::class, $org]);
-        return $action->handle(Project::where('organization_id', $org->id)->findOrFail($project->id));
+        return $action->handle($project);
     }
 }

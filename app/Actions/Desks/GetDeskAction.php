@@ -4,10 +4,10 @@ namespace App\Actions\Desks;
 
 use App\Models\Desk;
 
-class DeleteDeskAction
+class GetDeskAction
 {
     public function handle(Desk $desk)
     {
-        return $desk->delete();
+        return $desk->with('deskColumns.tasks')->get();
     }
 }
